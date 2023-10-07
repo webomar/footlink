@@ -1,0 +1,10 @@
+<!-- player_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Player Details</h2>
+  <p>Username: {{ player.user.username }}</p>
+  <p>Email: {{ player.user.email }}</p>
+  <!-- Add other player fields as needed -->
+{% endblock %}

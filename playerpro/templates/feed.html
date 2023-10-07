@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container px-5">
+
+    <!-- Form for creating new posts -->
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+  <div class="feed">
+    {% for post in posts %}
+      <div class="post">
+        <div class="post-header">
+          <h3>{{ post.text }}</h3>
+        </div>
+        <div class="post-body">
+          {% if post.image %}
+            {% for image in post.image.all %}
+              <img src="{{ image.url }}" alt="Post Image">
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+</div>
+</section>
+{% endblock %}
