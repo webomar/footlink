@@ -13,7 +13,6 @@ services:
       - PORT=8000
     volumes:
       - ./app:/app
-    command: "cd .. && gunicorn playerpro.wsgi:application"
     user: "wagtail"
     networks:
       - ng_default
