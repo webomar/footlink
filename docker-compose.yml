@@ -13,7 +13,7 @@ services:
       - PORT=8000
     volumes:
       - ./app:/app
-    command: ["gunicorn", "app/playerprohoho.wsgi:application"]
+    command: "gunicorn app/playerpro.wsgi:application"
     user: "wagtail"
     networks:
       - ng_default
