@@ -55,8 +55,8 @@ RUN python manage.py collectstatic --noinput --clear
 # RUN chown -R gunicorn:gunicorn /var/log/
 # Create a log directory and set permissions
 # RUN mkdir -p /var/log/
-RUN chmod 777 /var/log
-RUN chmod 777 /var/log/my_logs.log
+RUN chmod o+w /var/log
+RUN chmod o+w /var/log/my_logs.log
 
 
 # Runtime command that executes when "docker run" is called, it does the
