@@ -56,6 +56,7 @@ USER wagtail
 # RUN chmod 777 /var/log/my_logs.log
 
 
+RUN mkdir -p /var/log/mylogs && chmod -R 755 /var/log/mylogs/ && touch /var/log/mylogs/my_logs.log && chmod 644 /var/log/mylogs/my_logs.log
 
 
 
