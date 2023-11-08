@@ -30,7 +30,6 @@ RUN pip install "gunicorn==20.0.4"
 # Install the project requirements.
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
-RUN chmod 777 /app/logs
 
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
@@ -43,6 +42,7 @@ RUN mkdir -p /var/log/mylogs && chmod -R 777 /var/log/mylogs/ && touch /var/log/
 
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .
+RUN chmod 777 /app/logs
 
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
