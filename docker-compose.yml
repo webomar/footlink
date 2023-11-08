@@ -15,9 +15,8 @@ services:
       - ./app:/app
     command: ["gunicorn", "playerpro.wsgi:application"]
     user: "wagtail"
-
-  networks:
-    - ng_default
+    networks:
+      - ng_default
 volumes:
   wagtail-static:
     driver: local
