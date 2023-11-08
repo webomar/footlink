@@ -45,9 +45,6 @@ COPY --chown=wagtail:wagtail . .
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
 
-# Collect static files.
-RUN python manage.py collectstatic --noinput --clear
-
 
 
 
@@ -57,6 +54,15 @@ RUN python manage.py collectstatic --noinput --clear
 # RUN mkdir -p /var/log/
 RUN chmod o+w /var/log
 RUN chmod o+w /var/log/my_logs.log
+
+
+
+# Collect static files.
+RUN python manage.py collectstatic --noinput --clear
+
+
+
+
 
 
 # Runtime command that executes when "docker run" is called, it does the
