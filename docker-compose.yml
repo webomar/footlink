@@ -12,7 +12,8 @@ services:
       - PYTHONUNBUFFERED=1
       - PORT=8000
     volumes:
-      - ./app:/app
+      - .:/app
+    command: ["gunicorn", "playerpro.wsgi:application"]
     user: "wagtail"
     networks:
       - ng_default
