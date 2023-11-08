@@ -181,19 +181,3 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 
 
 
-LOGGING = {
-    'version': 1,
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/my_logs.log',
-        },
-    },
-    'loggers': {
-        '': {
-            'handlers': ['file'],
-            'level': 'INFO',
-        },
-    },
-}
