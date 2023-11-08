@@ -195,7 +195,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # Set the path to your log file
+            'filename': '/var/log/mylogs/my_logs.log',  # Set the path to your log file
             'formatter': 'verbose',
         },
     },
