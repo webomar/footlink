@@ -223,3 +223,8 @@ LOGGING = {
 #         'level': 'DEBUG',
 #     },
 # }
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://footlink-production.up.railway.app'
+]
