@@ -52,7 +52,7 @@ RUN python manage.py collectstatic --noinput --clear
 
 
 #Myshit: give gunicorn permission to log
-RUN chown -R gunicorn:gunicorn /var/log/
+# RUN chown -R gunicorn:gunicorn /var/log/
 
 
 
