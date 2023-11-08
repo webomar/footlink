@@ -189,7 +189,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/my_logs.log',
+            'filename': '/app/my_logs.log',
         },
     },
     'root': {
