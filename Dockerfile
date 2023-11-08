@@ -43,6 +43,7 @@ RUN mkdir -p /var/log/mylogs && chmod -R 777 /var/log/mylogs/ && touch /var/log/
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .
 RUN chmod 777 /app/logs
+RUN chmod 777 /app/logs/django.log
 
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
