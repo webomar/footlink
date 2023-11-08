@@ -39,6 +39,7 @@ WORKDIR /app
 # will be writing to the database file.
 RUN chown wagtail:wagtail /app
 RUN mkdir -p /var/log/mylogs && chmod -R 777 /var/log/mylogs/ && touch /var/log/mylogs/my_logs.log && chmod 777 /var/log/mylogs/my_logs.log
+RUN chmod 777 /app/logs
 
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .
