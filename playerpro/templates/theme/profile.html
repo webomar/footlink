@@ -12,14 +12,14 @@
         <!-- My profile START -->
         <div class="card">
           <!-- Cover image -->
-          <div class="h-200px rounded-top" style="background-image:url({% if user.cover_image %}{{user.cover_image.url}}{% else %}{% static 'assets/images/bg/05.jpg' %}{% endif %}); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+          <div class="h-200px rounded-top" style="background-image:url({{user.getCoverimageUrl}}); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
             <!-- Card body START -->
             <div class="card-body py-0">
               <div class="d-sm-flex align-items-start text-center text-sm-start">
                 <div>
                   <!-- Avatar -->
                   <div class="avatar avatar-xxl mt-n5 mb-3">
-                    <img class="avatar-img rounded-circle border border-white border-3" src="{% if user.profile_image %}{{user.profile_image.url}}{% else %}{% static 'assets/images/avatar/07.jpg' %}{% endif %}" alt="">
+                    <img class="avatar-img rounded-circle border border-white border-3" src="{{ user.getProfileimageUrl }}" alt="">
                   </div>
                 </div>
                 <div class="ms-sm-4 mt-sm-3">
@@ -71,7 +71,7 @@
               </div>
               <!-- List profile -->
               <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-                <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Lead Developer</li>
+                <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> {{user.player.position}}</li>
                 <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> New Hampshire</li>
                 <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on Nov 26, 2019</li>
               </ul>
@@ -81,386 +81,205 @@
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
                 <li class="nav-item"> <a class="nav-link active" href="my-profile.html"> Posts </a> </li>
-                <li class="nav-item"> <a class="nav-link" href="my-profile-about.html"> About </a> </li>
-                <li class="nav-item"> <a class="nav-link" href="my-profile-connections.html"> Connections <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
-                <li class="nav-item"> <a class="nav-link" href="my-profile-media.html"> Media</a> </li>
-                <li class="nav-item"> <a class="nav-link" href="my-profile-videos.html"> Videos</a> </li>
-                <li class="nav-item"> <a class="nav-link" href="my-profile-events.html"> Events</a> </li>
-                <li class="nav-item"> <a class="nav-link" href="my-profile-activity.html"> Activity</a> </li>
               </ul>
             </div>
           </div>
           <!-- My profile END -->
+
+
+
+          {% if user == request.user %}
 
           <!-- Share feed START -->
           <div class="card card-body">
             <div class="d-flex mb-3">
               <!-- Avatar -->
               <div class="avatar avatar-xs me-2">
-                <a href="#"> <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""> </a>
+                  <img class="avatar-img rounded-circle" src="{{ request.user.getProfileimageUrl }}" alt="">
               </div>
               <!-- Post input -->
-              <form class="w-100">
-                <input class="form-control pe-4 border-0" placeholder="Share your thoughts..." data-bs-toggle="modal" data-bs-target="#modalCreateFeed">
-              </form>
+              <form class="w-100" method="post" enctype="multipart/form-data">
+    						{% csrf_token %}
+							<textarea name="text" class="form-control pe-4 border-0" rows="2" data-autoresize placeholder="Share your thoughts..."></textarea>
+							<input name="file" class="form-control" type="file" id="">
+							<div class="d-grid gap-2 mt-3">
+								<button class="btn btn-primary" type="submit">Post</button>
+							</div>
+						</form>
             </div>
-            <!-- Share feed toolbar START -->
-            <ul class="nav nav-pills nav-stack small fw-normal">
-              <li class="nav-item">
-                <a class="nav-link bg-light py-1 px-2 mb-0" href="#!" data-bs-toggle="modal" data-bs-target="#feedActionPhoto"> <i class="bi bi-image-fill text-success pe-2"></i>Photo</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link bg-light py-1 px-2 mb-0" href="#!" data-bs-toggle="modal" data-bs-target="#feedActionVideo"> <i class="bi bi-camera-reels-fill text-info pe-2"></i>Video</a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link bg-light py-1 px-2 mb-0" data-bs-toggle="modal" data-bs-target="#modalCreateEvents"> <i class="bi bi-calendar2-event-fill text-danger pe-2"></i>Event </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link bg-light py-1 px-2 mb-0" href="#!" data-bs-toggle="modal" data-bs-target="#modalCreateFeed"> <i class="bi bi-emoji-smile-fill text-warning pe-2"></i>Feeling /Activity</a>
-              </li>
-              <li class="nav-item dropdown ms-sm-auto">
-                <a class="nav-link bg-light py-1 px-2 mb-0" href="#" id="feedActionShare" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-three-dots"></i>
-                </a>
-                <!-- Dropdown menu -->
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="feedActionShare">
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Create a poll</a></li>
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Ask a question </a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Help</a></li>
-                </ul>
-              </li>
-            </ul>
-            <!-- Share feed toolbar END -->
           </div>
           <!-- Share feed END -->
+          {% endif %}
 
-          <!-- Card feed item START -->
-          <div class="card">
-            <!-- Card header START -->
-            <div class="card-header border-0 pb-0">
-              <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                  <!-- Avatar -->
-                  <div class="avatar avatar-story me-2">
-                    <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""> </a>
-                  </div>
-                  <!-- Info -->
-                  <div>
-                    <div class="nav nav-divider">
-                      <h6 class="nav-item card-title mb-0"> <a href="#!"> Lori Ferguson </a></h6>
-                      <span class="nav-item small"> 2hr</span>
-                    </div>
-                    <p class="mb-0 small">Web Developer at Webestica</p>
-                  </div>
-                </div>
-                <!-- Card feed action dropdown START -->
-                <div class="dropdown">
-                  <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardFeedAction1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                  </a>
-                  <!-- Card feed action dropdown menu -->
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction1">
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
-                  </ul>
-                </div>
-                <!-- Card feed action dropdown END -->
-              </div>
-            </div>
-            <!-- Card header END -->
-            <!-- Card body START -->
-            <div class="card-body">
-              <p>I'm thrilled to share that I've completed a graduate certificate course in project management with the president's honor roll.</p>
-              <!-- Card img -->
-              <img class="card-img" src="assets/images/post/3by2/01.jpg" alt="Post">
-              <!-- Feed react START -->
-              <ul class="nav nav-stack py-3 small">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#!"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked (56)</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a>
-                </li>
-                <!-- Card share action START -->
-                <li class="nav-item dropdown ms-sm-auto">
-                  <a class="nav-link mb-0" href="#" id="cardShareAction8" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share (3)
-                  </a>
-                  <!-- Card share action dropdown menu -->
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction8">
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
-                  </ul>
-                </li>
-                <!-- Card share action END -->
-              </ul>
-              <!-- Feed react END -->
 
-              <!-- Add comment -->
-              <div class="d-flex mb-3">
-                <!-- Avatar -->
-                <div class="avatar avatar-xs me-2">
-                  <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/12.jpg" alt=""> </a>
-                </div>
-                <!-- Comment box  -->
-                <form class="position-relative w-100">
-                  <textarea class="form-control pe-4 bg-light" rows="1" placeholder="Add a comment..."></textarea>
-                </form>
-              </div>
-              <!-- Comment wrap START -->
-              <ul class="comment-wrap list-unstyled">
-                <!-- Comment item START -->
-                <li class="comment-item">
-                  <div class="d-flex position-relative">
-                    <!-- Avatar -->
-                    <div class="avatar avatar-xs">
-                      <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
-                    </div>
-                    <div class="ms-2">
-                      <!-- Comment by -->
-                      <div class="bg-light rounded-start-top-0 p-3 rounded">
-                        <div class="d-flex justify-content-between">
-                          <h6 class="mb-1"> <a href="#!"> Frances Guerrero </a></h6>
-                          <small class="ms-2">5hr</small>
-                        </div>
-                        <p class="small mb-0">Removed demands expense account in outward tedious do. Particular way thoroughly unaffected projection.</p>
-                      </div>
-                      <!-- Comment react -->
-                      <ul class="nav nav-divider py-2 small">
-                        <li class="nav-item">
-                          <a class="nav-link" href="#!"> Like (3)</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#!"> Reply</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#!"> View 5 replies</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <!-- Comment item nested START -->
-                  <ul class="comment-item-nested list-unstyled">
-                    <!-- Comment item START -->
-                    <li class="comment-item">
-                      <div class="d-flex">
-                        <!-- Avatar -->
-                        <div class="avatar avatar-xs">
-                          <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt=""></a>
-                        </div>
-                        <!-- Comment by -->
-                        <div class="ms-2">
-                          <div class="bg-light p-3 rounded">
-                            <div class="d-flex justify-content-between">
-                              <h6 class="mb-1"> <a href="#!"> Lori Stevens </a> </h6>
-                              <small class="ms-2">2hr</small>
-                            </div>
-                            <p class="small mb-0">See resolved goodness felicity shy civility domestic had but Drawings offended yet answered Jennings perceive.</p>
-                          </div>
-                          <!-- Comment react -->
-                          <ul class="nav nav-divider py-2 small">
-                            <li class="nav-item">
-                              <a class="nav-link" href="#!"> Like (5)</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="#!"> Reply</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <!-- Comment item END -->
-                    <!-- Comment item START -->
-                    <li class="comment-item">
-                      <div class="d-flex">
-                        <!-- Avatar -->
-                        <div class="avatar avatar-story avatar-xs">
-                          <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""></a>
-                        </div>
-                        <!-- Comment by -->
-                        <div class="ms-2">
-                          <div class="bg-light p-3 rounded">
-                            <div class="d-flex justify-content-between">
-                              <h6 class="mb-1"> <a href="#!"> Billy Vasquez </a> </h6>
-                              <small class="ms-2">15min</small>
-                            </div>
-                            <p class="small mb-0">Wishing calling is warrant settled was lucky.</p>
-                          </div>
-                          <!-- Comment react -->
-                          <ul class="nav nav-divider py-2 small">
-                            <li class="nav-item">
-                              <a class="nav-link" href="#!"> Like</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="#!"> Reply</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <!-- Comment item END -->
-                  </ul>
-                  <!-- Load more replies -->
-                  <a href="#!" role="button" class="btn btn-link btn-link-loader btn-sm text-secondary d-flex align-items-center mb-3 ms-5" data-bs-toggle="button" aria-pressed="true">
-                    <div class="spinner-dots me-2">
-                      <span class="spinner-dot"></span>
-                      <span class="spinner-dot"></span>
-                      <span class="spinner-dot"></span>
-                    </div>
-                    Load more replies 
-                  </a>
-                  <!-- Comment item nested END -->
-                </li>
-                <!-- Comment item END -->
-                <!-- Comment item START -->
-                <li class="comment-item">
-                  <div class="d-flex">
-                    <!-- Avatar -->
-                    <div class="avatar avatar-xs">
-                    <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
-                    </div>
-                    <!-- Comment by -->
-                    <div class="ms-2">
-                      <div class="bg-light p-3 rounded">
-                        <div class="d-flex justify-content-between">
-                          <h6 class="mb-1"> <a href="#!"> Frances Guerrero </a> </h6>
-                          <small class="ms-2">4min</small>
-                        </div>
-                        <p class="small mb-0">Removed demands expense account in outward tedious do. Particular way thoroughly unaffected projection.</p>
-                      </div>
-                      <!-- Comment react -->
-                      <ul class="nav nav-divider pt-2 small">
-                        <li class="nav-item">
-                          <a class="nav-link" href="#!"> Like (1)</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#!"> Reply</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#!"> View 6 replies</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-                <!-- Comment item END -->
-              </ul>
-              <!-- Comment wrap END -->
-            </div>
-            <!-- Card body END -->
-            <!-- Card footer START -->
-            <div class="card-footer border-0 pt-0">
-              <!-- Load more comments -->
-              <a href="#!" role="button" class="btn btn-link btn-link-loader btn-sm text-secondary d-flex align-items-center" data-bs-toggle="button" aria-pressed="true">
-                <div class="spinner-dots me-2">
-                  <span class="spinner-dot"></span>
-                  <span class="spinner-dot"></span>
-                  <span class="spinner-dot"></span>
-                </div>
-                Load more comments 
-              </a>
-            </div>
-            <!-- Card footer END -->
-          </div>
-          <!-- Card feed item END -->
 
-          <!-- Card feed item START -->
-          <div class="card">
-            
-            <div class="border-bottom">
-              <p class="small mb-0 px-4 py-2"><i class="bi bi-heart-fill text-danger pe-1"></i>Sam Lanson likes this post</p>
-            </div>
-            <!-- Card header START -->
-            <div class="card-header border-0 pb-0">
-              <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                  <!-- Avatar -->
-                  <div class="avatar me-2">
-                    <a href="#"> <img class="avatar-img rounded-circle" src="assets/images/logo/13.svg" alt=""> </a>
-                  </div>
-                  <!-- Title -->
-                  <div>
-                    <h6 class="card-title mb-0"> <a href="#!"> Apple Education </a></h6>
-                    <p class="mb-0 small">9 November at 23:29</p>
-                  </div>
-                </div>
-                <!-- Card share action menu -->
-                <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardShareAction5" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-three-dots"></i>
-                </a>
-                <!-- Card share action dropdown menu -->
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction5">
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
-                </ul>
-              </div>
-                <!-- Card share action END -->
-            </div>
-            <!-- Card header START -->
 
-            <!-- Card body START -->
-            <div class="card-body pb-0">
-              <p>Find out how you can save time in the classroom this year. Earn recognition while you learn new skills on iPad and Mac. Start  recognition your first Apple Teacher badge today!</p>
-              <!-- Feed react START -->
-              <ul class="nav nav-stack pb-2 small">
-                <li class="nav-item">
-                  <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> Louis, Billy and 126 others </a>
-                </li>
-                <li class="nav-item ms-sm-auto">
-                  <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a>
-                </li>
-              </ul>
-              <!-- Feed react END -->
-            </div>
-            <!-- Card body END -->
-            <!-- Card Footer START -->
-            <div class="card-footer py-3">
-              <!-- Feed react START -->
-              <ul class="nav nav-fill nav-stack small">
-                <li class="nav-item">
-                  <a class="nav-link mb-0 active" href="#!"> <i class="bi bi-heart pe-1"></i>Liked (56)</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link mb-0" href="#!"> <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a>
-                </li>
-                <!-- Card share action dropdown START -->
-                <li class="nav-item dropdown">
-                  <a href="#" class="nav-link mb-0" id="cardShareAction6" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share (3)
-                  </a>
-                  <!-- Card share action dropdown menu -->
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction6">
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
-                  </ul>
-                </li>
-                <!-- Card share action dropdown END -->
-                <li class="nav-item">
-                  <a class="nav-link mb-0" href="#!"> <i class="bi bi-send-fill pe-1"></i>Send</a>
-                </li>
-              </ul>
-              <!-- Feed react END -->
-            </div>
-            <!-- Card Footer END -->
-          </div>
-          <!-- Card feed item END -->
+
+				{% for post, duration, comments in posts reversed%}
+
+				<!-- Card feed item START -->
+				<div class="card">
+					<!-- Card header START -->
+					<div class="card-header border-0 pb-0">
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<!-- Avatar -->
+								<div class="avatar avatar-story me-2">
+									<a href="{% url 'profile' username=post.user.username %}">
+										<img class="avatar-img rounded-circle" src="{% if post.user.profile_image %}{{post.user.profile_image.url}}{% else %}{% static 'assets/images/avatar/07.jpg' %}{% endif %}" alt="">
+									</a>
+								</div>
+								<!-- Info -->
+								<div>
+									<div class="nav nav-divider">
+										<h6 class="nav-item card-title mb-0"> <a href="{% url 'profile' username=post.user.username %}"> {{post.user.first_name}} {{post.user.last_name}} </a></h6>
+										<span class="nav-item small"> {{duration}}</span>
+									</div>
+									<p class="mb-0 small">{{post.user.player.position}} at {{post.user.player.club}}</p>
+								</div>
+							</div>
+							<!-- Card feed action dropdown START -->
+							<div class="dropdown">
+								<a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardFeedAction" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="bi bi-three-dots"></i>
+								</a>
+								<!-- Card feed action dropdown menu -->
+								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction">
+									<li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
+									<li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
+									<li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
+									<li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
+								</ul>
+							</div>
+							<!-- Card feed action dropdown END -->
+						</div>
+					</div>
+					<!-- Card header END -->
+					<!-- Card body START -->
+					<div class="card-body">
+						<p>{{post.text}}</p>
+
+						{% for media in post.media_set.all %}
+
+						{% if post.media_set.all|length > 1 %}
+
+						{% elif post.media_set.all|length == 1 %}
+												
+							{% if media.is_image %}
+								<img class="card-img" src="{{ media.file.url }}" alt="Post">
+							{% elif media.is_video %}
+							<video controls>
+								<source src="{{ media.file.url }}" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							{% endif %}
+						{% endif %}
+						{% endfor %}
+
+
+
+						
+						
+						
+						<!-- Card img -->
+						<!-- Feed react START -->
+						<ul class="nav nav-stack py-3 small">
+							<li class="nav-item">
+								
+								
+								<a id="like-button-{{post.id}}" data-post-id="{{ post.id }}" class="like-button nav-link {% if post.id in liked_posts %}active{% endif %}" href="#!" data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="tooltip-text-start" data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i><span id="like-text-{{ post.id }}">{% if post.id in liked_posts %}Liked{% else %}Like{% endif %}</span> (<span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>)</a>
+							    <!-- Like Button Form -->
+									{% comment %} <button type="submit" class="btn btn-primary">Like</button> {% endcomment %}
+
+									{% comment %} <button type="button" class="btn btn-primary like-button" >Like</button> {% endcomment %}
+
+								{% comment %} Likes: <span class="like-count-{{ post.id }}">{{ post.likes.count }}</span> {% endcomment %}
+								{% comment %} <button class="like-button" data-post-id="{{ post.id }}">Like</button> {% endcomment %}
+							
+								
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>Comments (0)</a>
+							</li>
+
+						</ul>
+						<!-- Feed react END -->
+
+						<!-- Add comment -->
+						<div class="d-flex mb-3">
+							<!-- Avatar -->
+							<div class="avatar avatar-xs me-2">
+								<a href="#!">
+									<img class="avatar-img rounded-circle" src="{% static 'assets/images/avatar/12.jpg' %}" alt="">
+								</a>
+							</div>
+							<!-- Comment box  -->
+							<form class="nav nav-item w-100 position-relative">
+								<textarea id="comment-text-{{post.id}}" data-autoresize class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
+								<button id="comment-button-{{post.id}}" data-post-id="{{ post.id }}" class="comment-button nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0">
+									<i class="bi bi-send-fill"> </i>
+								</button>
+							</form>
+						</div>
+
+												<!-- Comment wrap START -->
+												<ul id="comment-section-{{post.id}}" class="comment-wrap list-unstyled">
+													{% for comment in comments reversed %}
+													<!-- Comment item START -->
+													<li class="comment-item">
+														<div class="d-flex position-relative">
+															<!-- Avatar -->
+															<div class="avatar avatar-xs">
+																<a href="#!">
+																	<img class="avatar-img rounded-circle" src="{{comment.user.getProfileimageUrl}}" alt="">
+																</a>
+															</div>
+															<div class="ms-2">
+																<!-- Comment by -->
+																<div class="bg-light rounded-start-top-0 p-3 rounded">
+																	<div class="d-flex justify-content-between">
+																		<h6 class="mb-1"> <a href="#!"> {{comment.user.first_name}} {{comment.user.last_name}} </a></h6>
+																		{% comment %} <small class="ms-2">5hr</small> {% endcomment %}
+																	</div>
+																	<p class="small mb-0">{{comment.text}}</p>
+																</div>
+																<!-- Comment react -->
+																<ul class="nav nav-divider py-2 small">
+																	<li class="nav-item">
+																		<a class="nav-link" href="#!"> Like (3)</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link" href="#!"> Reply</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link" href="#!"> View 5 replies</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+													</li>
+													<!-- Comment item END -->
+{% endfor %}
+
+												</ul>
+												<!-- Comment wrap END -->
+
+					</div>
+					<!-- Card body END -->
+				</div>
+				<!-- Card feed item END -->
+
+				{% endfor %}
+
+
+
+
+
+
+
+
       </div>
       <!-- Main content END -->
 
@@ -478,13 +297,13 @@
               </div>
               <!-- Card body START -->
               <div class="card-body position-relative pt-0">
-                <p>He moonlights difficult engrossed it, sportsmen. Interested has all Devonshire difficulty gay assistance joy.</p>
+                {% comment %} <p>He moonlights difficult engrossed it, sportsmen. Interested has all Devonshire difficulty assistance joy.</p>
                 <!-- Date time -->
                 <ul class="list-unstyled mt-3 mb-0">
                   <li class="mb-2"> <i class="bi bi-calendar-date fa-fw pe-1"></i> Born: <strong> October 20, 1990 </strong> </li>
                   <li class="mb-2"> <i class="bi bi-heart fa-fw pe-1"></i> Status: <strong> Single </strong> </li>
                   <li> <i class="bi bi-envelope fa-fw pe-1"></i> Email: <strong> webestica@gmail.com </strong> </li>
-                </ul>
+                </ul> {% endcomment %}
               </div>
               <!-- Card body END -->
             </div>
@@ -502,7 +321,7 @@
               <!-- Card header END -->
               <!-- Card body START -->
               <div class="card-body position-relative pt-0">
-                <!-- Experience item START -->
+                {% comment %} <!-- Experience item START -->
                 <div class="d-flex">
                   <!-- Avatar -->
                   <div class="avatar me-3">
@@ -544,7 +363,7 @@
                 </div>
                 <!-- Experience item END -->
 
-              </div>
+              </div> {% endcomment %}
               <!-- Card body END -->
             </div>
           </div>
@@ -561,7 +380,7 @@
               <!-- Card header END -->
               <!-- Card body START -->
               <div class="card-body position-relative pt-0">
-                <div class="row g-2">
+                {% comment %} <div class="row g-2">
                   <!-- Photos item -->
                   <div class="col-6">
                     <a href="assets/images/albums/01.jpg" data-gallery="image-popup" data-glightbox="">
@@ -593,7 +412,7 @@
                     </a>
                     <!-- glightbox Albums left bar END  -->
                   </div>
-                </div>
+                </div> {% endcomment %}
               </div>
               <!-- Card body END -->
             </div>
@@ -605,93 +424,38 @@
             <div class="card">
               <!-- Card header START -->
               <div class="card-header d-sm-flex justify-content-between align-items-center border-0">
-                <h5 class="card-title">Friends <span class="badge bg-danger bg-opacity-10 text-danger">230</span></h5>
-                <a class="btn btn-primary-soft btn-sm" href="#!"> See all friends</a>
+                <h5 class="card-title">Following <span class="badge bg-danger bg-opacity-10 text-danger">{{user.following.all.count}}</span></h5>
+                <a class="btn btn-primary-soft btn-sm" href="#!"> See all following</a>
               </div>
               <!-- Card header END -->
               <!-- Card body START -->
               <div class="card-body position-relative pt-0">
                 <div class="row g-3">
 
+
+
+                  {% for user in user.followers.all %}
                   <div class="col-6">
                     <!-- Friends item START -->
                     <div class="card shadow-none text-center h-100">
                       <!-- Card body -->
                       <div class="card-body p-2 pb-0">
                         <div class="avatar avatar-story avatar-xl">
-                          <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt=""></a>
+                          <a href="{% url 'profile' username=user.username %}"><img class="avatar-img rounded-circle" src="{{ user.getProfileimageUrl }}" alt=""></a>
                         </div>
-                        <h6 class="card-title mb-1 mt-3"> <a href="#!"> Amanda Reed </a></h6>
-                        <p class="mb-0 small lh-sm">16 mutual connections</p>
+                        <h6 class="card-title mb-1 mt-3"> <a href="{% url 'profile' username=user.username %}"> {{user.first_name}} {{user.last_name}} </a></h6>
+                        <p class="mb-0 small lh-sm">{{user.player.position}} at {{user.player.club}} </p>
                       </div>
                       <!-- Card footer -->
                       <div class="card-footer p-2 border-0">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Send message"> <i class="bi bi-chat-left-text"></i> </button>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button>
+                        {% comment %} <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Send message"> <i class="bi bi-chat-left-text"></i> </button> {% endcomment %}
+                        {% comment %} <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button> {% endcomment %}
                       </div>
                     </div>
                     <!-- Friends item END -->
                   </div>
+                  {% endfor %}
 
-                  <div class="col-6">
-                    <!-- Friends item START -->
-                    <div class="card shadow-none text-center h-100">
-                      <!-- Card body -->
-                      <div class="card-body p-2 pb-0">
-                        <div class="avatar avatar-xl">
-                          <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt=""></a>
-                        </div>
-                        <h6 class="card-title mb-1 mt-3"> <a href="#!"> Samuel Bishop </a></h6>
-                        <p class="mb-0 small lh-sm">22 mutual connections</p>
-                      </div>
-                      <!-- Card footer -->
-                      <div class="card-footer p-2 border-0">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Send message"> <i class="bi bi-chat-left-text"></i> </button>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button>
-                      </div>
-                    </div>
-                    <!-- Friends item END -->
-                  </div>
-
-                  <div class="col-6">
-                    <!-- Friends item START -->
-                    <div class="card shadow-none text-center h-100">
-                      <!-- Card body -->
-                      <div class="card-body p-2 pb-0">
-                        <div class="avatar avatar-xl">
-                          <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""></a>
-                        </div>
-                        <h6 class="card-title mb-1 mt-3"> <a href="#"> Bryan Knight </a></h6>
-                        <p class="mb-0 small lh-sm">1 mutual connection</p>
-                      </div>
-                      <!-- Card footer -->
-                      <div class="card-footer p-2 border-0">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Send message"> <i class="bi bi-chat-left-text"></i> </button>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button>
-                      </div>
-                    </div>
-                    <!-- Friends item END -->
-                  </div>
-
-                  <div class="col-6">
-                    <!-- Friends item START -->
-                    <div class="card shadow-none text-center h-100">
-                      <!-- Card body -->
-                      <div class="card-body p-2 pb-0">
-                        <div class="avatar avatar-xl">
-                          <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
-                        </div>
-                        <h6 class="card-title mb-1 mt-3"> <a href="#!"> Amanda Reed </a></h6>
-                        <p class="mb-0 small lh-sm">15 mutual connections</p>
-                      </div>
-                      <!-- Card footer -->
-                      <div class="card-footer p-2 border-0">
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Send message"> <i class="bi bi-chat-left-text"></i> </button>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button>
-                      </div>
-                    </div>
-                    <!-- Friends item END -->
-                  </div>
 
                 </div>
               </div>
@@ -980,4 +744,108 @@
   </div>
 </div>
 <!-- Modal create events END -->
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+   var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+
+   $('.like-button').click(function () {
+	   var postId = $(this).data('post-id');
+	   console.log(postId)
+
+	   $.ajax({
+		   type: 'POST',
+		   url: '/like_post/' + postId + '/',
+		   data: {},
+		   headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+		   success: function (data) {
+
+			   if(data.remove == true){
+				$('#like-text-' + postId).text('Like');
+				$('#like-button-' + postId).removeClass('active');
+				$('#like-count-' + postId).text(data.likes_count);
+
+			   }
+			   else{
+			   // Update the like count for the specific post
+			   $('#like-count-' + postId).text(data.likes_count);
+			   $('#like-text-' + postId).text('Liked');
+			   $('#like-button-' + postId).addClass('active');
+			   }
+			   console.log(data)
+		   }
+	   });
+   });
+
+
+
+
+
+   $('.comment-button').click(function () {
+	var postId = $(this).data('post-id');
+	console.log(postId)
+	var comment_value = $('#comment-text-'+postId).val()
+	console.log('comment_value')
+	console.log(comment_value)
+	$.ajax({
+		type: 'POST',
+		url: '/comment_post/' + postId + '/' + comment_value + '/',
+		data: {},
+		headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+		success: function (data) {
+			// load fucking comments again
+			$('#comment-count-' + postId).text(data.comment_count);
+
+			// Clear the input field after a successful comment submission
+			$('#comment-text-' + postId).val('');
+
+                // Update the comment section with the newly added comment
+                var commentSection = $('#comment-section-' + postId);
+				var newCommentHTML = `
+<li class="comment-item">
+	<div class="d-flex position-relative">
+		<!-- Avatar -->
+		<div class="avatar avatar-xs">
+			<a href="#!">
+				<img class="avatar-img rounded-circle" src="`+data.comment.imgurl+`" alt="">
+			</a>
+		</div>
+		<div class="ms-2">
+			<!-- Comment by -->
+			<div class="bg-light rounded-start-top-0 p-3 rounded">
+				<div class="d-flex justify-content-between">
+					<h6 class="mb-1"> <a href="#!"> `+data.comment.first_name +data.comment.last_name+`</a></h6>
+					{% comment %} <small class="ms-2">5hr</small> {% endcomment %}
+				</div>
+				<p class="small mb-0">`+data.comment.text+`</p>
+			</div>
+			<!-- Comment react -->
+			<ul class="nav nav-divider py-2 small">
+				<li class="nav-item">
+					<a class="nav-link" href="#!"> Like (3)</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#!"> Reply</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#!"> View 5 replies</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</li>
+`;
+				var newComment = '<div class="comment">' +
+					'<strong>' + data.comment.username + '</strong>: ' +
+					data.comment.text +
+					'</div>';
+				commentSection.prepend(newCommentHTML);
+		}
+	});
+});
+});
+</script>
 {% endblock content %}

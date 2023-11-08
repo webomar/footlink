@@ -1,0 +1,358 @@
+{% extends 'theme/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<main>
+  <!-- Container START -->
+  <div class="container">
+    <div class="row">
+
+      <!-- Sidenav START -->
+      <div class="col-lg-3">
+
+        <!-- Advanced filter responsive toggler START -->
+				<!-- Divider -->
+				<div class="d-flex align-items-center mb-4 d-lg-none">
+					<button class="border-0 bg-transparent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+						<span class="btn btn-primary"><i class="fa-solid fa-sliders-h"></i></span>
+            <span class="h6 mb-0 fw-bold d-lg-none ms-2">Settings</span>
+					</button>
+				</div>
+				<!-- Advanced filter responsive toggler END -->
+
+        <nav class="navbar navbar-light navbar-expand-lg mx-0">
+          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+            <!-- Offcanvas header -->
+						<div class="offcanvas-header">
+							<button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+						</div>
+
+            <!-- Offcanvas body -->
+            <div class="offcanvas-body p-0">
+              <!-- Card START -->
+              <div class="card w-100">
+                <!-- Card body START -->
+                <div class="card-body">
+
+                <!-- Side Nav START -->
+                <ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0">
+                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                    <a class="nav-link d-flex mb-0 active" href="#nav-setting-tab-1" data-bs-toggle="tab">
+                      <img class="me-2 h-20px fa-fw" src="{% static 'assets/images/icon/person-outline-filled.svg' %}" alt="">
+                      <span>Account</span>
+                    </a>
+                  </li>
+
+                </ul>
+                <!-- Side Nav END -->
+
+              </div>
+              <!-- Card body END -->
+              <!-- Card footer -->
+              <div class="card-footer text-center py-2">
+                <a class="btn btn-link text-secondary btn-sm" href="{% url 'profile' username=request.user.username %}">View Profile </a>
+              </div>
+              </div>
+            <!-- Card END -->
+            </div>
+            <!-- Offcanvas body -->
+
+            <!-- Helper link START -->
+            <ul class="nav small mt-4 justify-content-center lh-1">
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Support </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Docs </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Help</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Privacy & terms</a>
+              </li>
+            </ul>
+            <!-- Helper link END -->
+            <!-- Copyright -->
+            <p class="small text-center mt-1">©2023 <a class="text-body" target="_blank" href="https://www.webestica.com/"> Webestica </a></p>
+          
+          </div>
+        </nav>
+      </div>
+      <!-- Sidenav END -->
+
+        <!-- Main content START -->
+        <div class="col-lg-6 vstack gap-4">
+          <!-- Setting Tab content START -->
+          <div class="tab-content py-0 mb-0">
+
+            <!-- Account setting tab START -->
+            <div class="tab-pane show active fade" id="nav-setting-tab-1">
+              <!-- Account settings START -->
+              <div class="card mb-4">
+                
+                <!-- Title START -->
+                <div class="card-header border-0 pb-0">
+                  <h1 class="h5 card-title">Account Settings</h1>
+                  <p class="mb-0">Add personal information:</p>
+                </div>
+                <!-- Card header START -->
+                <!-- Card body START -->
+                <div class="card-body">
+                  <!-- Form settings START -->
+                  {% comment %} <form class="row g-3" method="POST">
+                    
+                    <!-- First name -->
+                    <div id="div_id_first_name" class="form-group col-sm-6 col-lg-4">
+                      <div> 
+                      <label class="form-label">First name</label>
+                         <input type="text" name="first_name" maxlength="255" class="textinput form-control" required="" id="id_first_name"> 
+                      </div>
+                    </div>
+
+                    <!-- Last name -->
+                    <div id="div_id_last_name" class="col-sm-6 col-lg-4">
+                      <label class="form-label">Last name</label>
+                      <input type="text" name="last_name" maxlength="255" class="textinput form-control" required="" id="id_last_name">
+                    </div>
+
+
+                    <!-- User name -->
+                    <div class="col-sm-6">
+                      <label class="form-label">User name</label>
+                      <input type="text" class="form-control" placeholder="" value="@samlanson">
+                    </div>
+                    <!-- Birthday -->
+                    <div id="div_id_date_of_birth" class="col-lg-6">
+                      <label class="form-label">Birthday </label>
+                      <input name="date_of_birth"  type="date" class="form-control flatpickr" value="12/12/2000">
+                    </div>
+                    <!-- Allow checkbox -->
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="allowChecked" checked>
+                        <label class="form-check-label" for="allowChecked">
+                          Allow anyone to add you to their team
+                        </label>
+                      </div>
+                    </div>
+                    <!-- Phone number -->
+                    <div class="col-sm-6">
+                      <label class="form-label">Phone number</label>
+                      <input type="text" class="form-control" placeholder="" value="(678) 324-1251">
+                      <!-- Add new number -->
+                      <a class="btn btn-sm btn-dashed rounded mt-2" href="#!"> <i class="bi bi-plus-circle-dotted me-1"></i>Add new phone number</a>
+                    </div>
+                    <!-- Phone number -->
+                    <div class="col-sm-6">
+                      <label class="form-label">Email</label>
+                      <input type="text" class="form-control" placeholder="" value="sam@webestica.com">
+                      <!-- Add new email -->
+                      <a class="btn btn-sm btn-dashed rounded mt-2" href="#!"> <i class="bi bi-plus-circle-dotted me-1"></i>Add new email address</a>
+                    </div>
+                    <!-- Page information -->
+                    <div class="col-12">
+                      <label class="form-label">Overview</label>
+                      <textarea class="form-control" rows="4" placeholder="Description (Required)">Interested has all Devonshire difficulty gay assistance joy. Handsome met debating sir dwelling age material. As style lived he worse dried. Offered related so visitors we private removed. Moderate do subjects to distance.</textarea>
+                      <small>Character limit: 300</small>
+                    </div>
+                    <!-- Button  -->
+                    <div class="col-12 text-end">
+                      <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
+                    </div>
+                  </form> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+                  <form class="row g-3" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div id="div_id_first_name" class="form-group col-sm-6 col-lg-6">
+                      <div> 
+                        <label for="id_first_name" class=" requiredField">
+                        First name 
+                        </label> 
+                        <input type="text" name="first_name" maxlength="255" class="textinput form-control" required="" id="id_first_name"  value="{{request.user.first_name}}"> 
+                       </div>
+                    </div>
+                    <div id="div_id_last_name" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_last_name" class=" requiredField">
+                       Last name </label> 
+                       <div> 
+                        <input type="text" name="last_name" maxlength="255" class="textinput form-control" required="" id="id_last_name"  value="{{request.user.last_name}}"> 
+                      </div>
+                    </div>
+                    <div id="div_id_email" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_email" class=" requiredField">
+                       Email<span class="asteriskField">*</span> </label> 
+                       <div> <input type="email" name="email" maxlength="254" class="emailinput form-control" required="" id="id_email" value="{{request.user.email}}"> </div>
+                    </div>
+                    {% comment %} <div id="div_id_profile_image" class="form-group">
+                       <label for="id_profile_image" class="">
+                       Profile image
+                       </label> 
+                       <div> <input type="file" name="profile_image" accept="image/*" class="clearablefileinput form-control-file" id="id_profile_image"> </div>
+                    </div> {% endcomment %}
+                    <div id="div_id_place" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_place" class=" requiredField">
+                       Place<span class="asteriskField">*</span> </label> 
+                       <div> <input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  value="{{request.user.place}}"> </div>
+                    </div>
+                    <div id="div_id_country" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_country" class=" requiredField">
+                       Country<span class="asteriskField">*</span> </label> 
+                       <div> <input type="text" name="country" maxlength="255" class="textinput form-control" required="" id="id_country" value="{{request.user.country}}"> </div>
+                    </div>
+
+                    <div id="div_id_date_of_birth" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_date_of_birth" class=" requiredField">
+                       Date of birth<span class="asteriskField">*</span> </label> 
+                       <div> <input type="date" name="date_of_birth" class="dateinput form-control" required="" id="id_date_of_birth" value="{{request.user.date_of_birth|date:'Y-m-d'}}"> </div>
+                    </div>
+
+                    <div id="div_id_club" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_club" class=" requiredField">
+                       Club<span class="asteriskField">*</span> </label> 
+                       <div> <input type="text" name="club" value="{{request.user.player.club}}" maxlength="255" class="textinput form-control" required="" id="id_club"> </div>
+                    </div>
+                    <div id="div_id_competition" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_competition" class=" requiredField">
+                       Competition<span class="asteriskField">*</span> </label> 
+                       <div> <input type="text" name="competition" value="{{request.user.player.competition}}" maxlength="255" class="textinput form-control" required="" id="id_competition"> </div>
+                    </div>
+                    <div id="div_id_length" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_length" class=" requiredField">
+                       Length<span class="asteriskField">*</span> </label> 
+                       <div> <input type="number" name="length" value="{{request.user.player.length}}" class="numberinput form-control" required="" id="id_length"> </div>
+                    </div>
+                    <div id="div_id_weight" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_weight" class=" requiredField">
+                       Weight<span class="asteriskField">*</span> </label> 
+                       <div> <input type="number" name="weight" value="{{request.user.player.weight}}" class="numberinput form-control" required="" id="id_weight"> </div>
+                    </div>
+                    <div id="div_id_position" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_position" class=" requiredField">
+                       Position<span class="asteriskField">*</span> </label> 
+                       <div> <input type="text" name="position"  value="{{request.user.player.position}}" maxlength="255" class="textinput form-control" required="" id="id_position"> </div>
+                    </div>
+                    <div id="div_id_qualities" class="form-group col-sm-6 col-lg-6">
+                       <label for="id_qualities" class=" requiredField">
+                       Qualities<span class="asteriskField">*</span> </label> 
+                       <div> <input type="text" name="qualities"  value="{{request.user.player.qualities}}" maxlength="255" class="textinput form-control" required="" id="id_qualities"> </div>
+                    </div>
+
+
+
+
+                    <div id="div_id_goals" class="form-group col-sm-6 col-lg-6">
+                      <label for="id_goals" class=" requiredField">
+                      Number of goals<span class="asteriskField">*</span> </label> 
+                      <div> <input type="number" name="goals" value="{{request.user.player.goals}}" class="numberinput form-control" required="" id="id_goals"> </div>
+                   </div>
+                   <div id="div_id_assists" class="form-group col-sm-6 col-lg-6">
+                      <label for="id_assists" class=" requiredField">
+                      Assists<span class="asteriskField">*</span> </label> 
+                      <div> <input type="number" name="assists" value="{{request.user.player.assists}}" class="numberinput form-control" required="" id="id_assists"> </div>
+                   </div>
+                   <div id="div_id_position" class="form-group col-sm-6 col-lg-6">
+                      <label for="id_position" class=" requiredField">
+                      Position<span class="asteriskField">*</span> </label> 
+                      <div> <input type="text" name="position"  value="{{request.user.player.position}}" maxlength="255" class="textinput form-control" required="" id="id_position"> </div>
+                   </div>
+                   <div id="div_id_qualities" class="form-group col-sm-6 col-lg-6">
+                      <label for="id_qualities" class=" requiredField">
+                      Qualities<span class="asteriskField">*</span> </label> 
+                      <div> <input type="text" name="qualities"  value="{{request.user.player.qualities}}" maxlength="255" class="textinput form-control" required="" id="id_qualities"> </div>
+                   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div id="div_id_profile_image" class="form-group"> 
+                      <label for="id_profile_image" class="">
+                      Profile image
+                      </label> 
+                      <div> 
+                        <input type="file" name="profile_image" accept="image/*" class="clearablefileinput form-control-file" id="id_profile_image"> 
+                      </div> 
+                    </div>
+
+                    <div id="div_id_cover_image" class="form-group"> 
+                      <label for="id_cover_image" class="">
+                      Cover image
+                      </label> 
+                      <div> 
+                        <input type="file" name="cover_image" accept="image/*" class="clearablefileinput form-control-file" id="id_cover_image"> 
+                      </div> 
+                    </div>
+
+
+
+                    <!-- Button  -->
+                    <div class="col-12 text-end">
+                      <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
+                    </div>
+                   </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <!-- Settings END -->
+                </div>
+              <!-- Card body END -->
+              </div>
+              <!-- Account settings END -->
+
+
+            </div>
+            <!-- Account setting tab END -->
+
+          </div>
+          <!-- Setting Tab content END -->
+        </div>
+
+    </div> <!-- Row END -->
+  </div>
+  <!-- Container END -->
+
+</main>
+
+
+
+
+{% endblock content %}
+

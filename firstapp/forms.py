@@ -177,7 +177,23 @@ from django.forms import DateInput
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        exclude = ['last_login', 'groups', 'user_permissions', 'password', 'is_active', 'date_joined', 'is_player', 'is_coach', 'is_scout', 'is_staff', 'is_superuser', 'username']
+        exclude = ['last_login', 'groups', 'user_permissions', 'password', 'is_active', 'date_joined', 'is_player', 'is_coach', 'is_scout', 'is_staff', 'is_superuser', 'username', 'followed_users', 'following']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['date_of_birth'].widget = DateInput(attrs={'type': 'date'})
+
+
+class EditUserForm69(forms.ModelForm):
+    class Meta:
+        model = User
+        exclude = (
+            'is_player',
+            'is_coach',
+            'is_scout',
+            'media_collection',
+            'followed_users',
+            'posts',
+        )
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['date_of_birth'].widget = DateInput(attrs={'type': 'date'})

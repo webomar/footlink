@@ -6,8 +6,10 @@
 		<div class="container">
 			<!-- Logo START -->
 			<a class="navbar-brand" href="{% url 'feed' %}">
-				<img class="light-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo">
-				<img class="dark-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo">
+				<img class="navbar-brand-item" src="{% static 'final.png' %}" alt="logo">
+				
+				{% comment %} <img class="light-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo">
+				<img class="dark-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo"> {% endcomment %}
 			</a>
 			<!-- Logo END -->
 
@@ -26,8 +28,9 @@
 				<!-- Nav Search START -->
 				<div class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0">
 					<div class="nav-item w-100">
-						<form class="rounded position-relative">
-							<input class="form-control ps-5 bg-light" type="search" placeholder="Search..." aria-label="Search">
+						<form class="rounded position-relative" method="post" action="{% url 'discover' %}">
+							{% csrf_token %}
+							<input class="form-control ps-5 bg-light" type="search" placeholder="Search..." aria-label="Search" name="searched">
 							<button class="btn bg-transparent px-2 py-0 position-absolute top-50 start-0 translate-middle-y" type="submit"><i class="bi bi-search fs-5"> </i></button>
 						</form>
 					</div>
@@ -240,7 +243,7 @@
 
 				<li class="nav-item ms-2 dropdown">
 					<a class="nav-link btn icon-md p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-						<img cass="avatar-img rounded-2" src="{% if request.user.profile_image %}{{request.user.profile_image.url}}{% else %}{% static 'assets/images/avatar/07.jpg' %}{% endif %}" alt="">
+						<img cass="avatar-img rounded-2" src="{{ request.user.getProfileimageUrl }}" alt="">
 					</a>
 					<ul class="dropdown-menu dropdown-animation dropdown-menu-end pt-3 small me-md-n3" aria-labelledby="profileDropdown">
 						<!-- Profile info -->
@@ -248,7 +251,7 @@
 							<div class="d-flex align-items-center position-relative">
 								<!-- Avatar -->
 								<div class="avatar me-3">
-									<img class="avatar-img rounded-circle" src="{% if request.user.profile_image %}{{request.user.profile_image.url}}{% else %}{% static 'assets/images/avatar/07.jpg' %}{% endif %}" alt="avatar">
+									<img class="avatar-img rounded-circle" src="{{ request.user.getProfileimageUrl }}" alt="avatar">
 								</div>
 								<div>
 									<a class="h6 stretched-link" href="#">Lori Ferguson</a>

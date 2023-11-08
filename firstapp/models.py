@@ -11,16 +11,30 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
     email = models.EmailField(unique=True)
-    profile_image = models.ImageField(upload_to='profile_images', default='/static/profile.jpg', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     cover_image = models.ImageField(upload_to='cover_images', blank=True, null=True)
     place = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
     date_of_birth = models.DateField(null=True)
+    phone_number = models.CharField(max_length=20, null=True)
+    media_collection = models.ManyToManyField('Post', related_name='players', blank=True)
+    followed_users = models.ManyToManyField('User', related_name='followed')    
+    posts = models.ManyToManyField('Post', related_name='player_posts', blank=True)
 
-    def getImageUrl(self):
+    def getProfileimageUrl(self):
         if not self.profile_image:
             # depending on your template
-            return '/static/profile.jpg'
+            return '/static/profile_placeholder.jpg'
+
+        else:
+        # Return the URL of the uploaded image
+            return self.profile_image.url
+        
+    def getCoverimageUrl(self):
+        if not self.profile_image:
+            # depending on your template
+            return '/static/cover_placeholder.jpg'
+
         else:
         # Return the URL of the uploaded image
             return self.profile_image.url
@@ -50,20 +64,20 @@ class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='player')
 
     # Add additional fields specific to each user type
-    club = models.CharField(max_length=255, null=True)
-    nft = models.CharField(max_length=255, null=True)
-    competition = models.CharField(max_length=255, null=True)
-    length = models.IntegerField(null=True)
+    club = models.CharField(max_length=255, null=True, blank=True)
+    nft = models.CharField(max_length=255, null=True, blank=True) # national football team
+    competition = models.CharField(max_length=255, null=True, blank=True)
+    length = models.IntegerField(null=True, blank=True)
     weight = models.IntegerField(null=True)
-    preferred_leg = models.CharField(max_length=10, null=True)
-    position = models.CharField(max_length=255, null=True)
-    qualities = models.CharField(max_length=255, null=True)
-    career_statistics = models.CharField(max_length=255, null=True)
-    ambition = models.TextField(null=True)
-    phone_number = models.CharField(max_length=20, null=True)
-    media_collection = models.ManyToManyField('Post', related_name='players', blank=True)
-    followed_players = models.ManyToManyField(User, related_name='followed')    
-    posts = models.ManyToManyField('Post', related_name='player_posts', blank=True)
+    preferred_leg = models.CharField(max_length=10, null=True, blank=True)
+    position = models.CharField(max_length=255, null=True, blank=True)
+    qualities = models.CharField(max_length=255, null=True, blank=True)
+    career_statistics = models.CharField(max_length=255, null=True, blank=True)
+    ambition = models.TextField(null=True, blank=True)
+    goals = models.IntegerField(null=True, blank=True)
+    assists = models.IntegerField(null=True, blank=True)
+    passes = models.IntegerField(null=True, blank=True)
+    tackles = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.user.email
@@ -81,7 +95,6 @@ class Coach(models.Model):
 class Scout(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='scout')
 
-    followed_players = models.ManyToManyField(User, related_name='scouts')
     player_notes = models.TextField()
     posts = models.ManyToManyField('Post', related_name='scout_posts')
     
@@ -95,11 +108,12 @@ class Zaakwaarnemer(models.Model):
 
 
 
+from django.db import models
+
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -110,9 +124,9 @@ class Comment(models.Model):
 class Post(models.Model):
     text = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)  # This field will automatically set the current date and time when a post is created
-    likes = models.ManyToManyField(User, related_name='liked_posts', through=Like, null=True, blank=True)
-    comments = models.ManyToManyField(User, related_name='post_comments', through=Comment, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_posts', through=Like)
+    comments = models.ManyToManyField(Comment, related_name='post_comments')
 
     # media = models.ManyToManyField(Media, related_name='posts', blank=True)
 

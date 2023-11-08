@@ -88,7 +88,7 @@ def feed(request):
 
     users = User.objects.all()
     
-    return render(request, 'social/index.html', {'posts': posts_with_comments, 'form':form, 'mediaform':mediaform, 'users':users, 'liked_posts':liked_posts})
+    return render(request, 'theme/index.html', {'posts': posts_with_comments, 'form':form, 'mediaform':mediaform, 'users':users, 'liked_posts':liked_posts})
 
 
 
@@ -164,7 +164,7 @@ class PlayerSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('feed')
+        return redirect('edit_account')
 
 
     def form_invalid(self, form):
@@ -398,7 +398,7 @@ def player_detail(request, player_pk):
 
 
 
-
+from .forms import EditUserForm69
 @login_required
 def edit_account(request):
     if request.method == 'POST':
@@ -435,27 +435,29 @@ def edit_account(request):
             # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
 
     else:
-        form = EditProfileForm(instance=request.user)
-
-        player = getattr(request.user, 'player', None)
-        if player is not None:
-            profile_form = PlayerProfileForm(instance=request.user.player)
-            print("player is not None")
-
-        scout = getattr(request.user, 'scout', None)
-        if scout is not None:
-            print("scout is not None")
-            profile_form = ScoutProfileForm(instance=request.user.scout)
-
-        coach = getattr(request.user, 'coach', None)
-        if coach is not None:
-            print("coach is not None")
-            profile_form = CoachProfileForm(instance=request.user.coach)
-
         args = {}
-        # args.update(csrf(request))
-        args['form'] = form
-        args['profile_form'] = profile_form
+
+        # form = EditProfileForm(instance=request.user)
+        # # form = EditUserForm69(instance=request.user)
+
+        # player = getattr(request.user, 'player', None)
+        # if player is not None:
+        #     profile_form = PlayerProfileForm(instance=request.user.player)
+        #     print("player is not None")
+
+        # scout = getattr(request.user, 'scout', None)
+        # if scout is not None:
+        #     print("scout is not None")
+        #     profile_form = ScoutProfileForm(instance=request.user.scout)
+
+        # coach = getattr(request.user, 'coach', None)
+        # if coach is not None:
+        #     print("coach is not None")
+        #     profile_form = CoachProfileForm(instance=request.user.coach)
+
+        # # args.update(csrf(request))
+        # args['form'] = form
+        # args['profile_form'] = profile_form
         
         return render(request, 'theme/settings.html', args)
 
@@ -466,61 +468,125 @@ def edit_account(request):
 
 @login_required
 def profile(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    posts = Post.objects.filter(user=user)
+    posts_with_duration = []
+    liked_posts = Like.objects.filter(user=request.user).values_list('post_id', flat=True)
+
+
+    for post in posts:
+        # Calculate the duration since the post was created
+        duration = timesince(post.created_at)
+        posts_with_duration.append((post, duration))
+
+    posts_with_comments = []
+    for post, duration in posts_with_duration:
+        # Fetch comments for the current post
+        comments = Comment.objects.filter(post=post)
+        posts_with_comments.append((post, duration, comments))
+
+    args['posts'] = posts_with_comments
+    args['liked_posts'] = liked_posts
+    
     if request.method == 'POST':
         print('request.method == post')
-        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
-        profile_form = PlayerProfileForm(request.POST, instance=request.user.player)  # request.FILES is show the selected image or file
-
-        print("request.FILES")
-        print("request.FILES")
-        print("request.FILES")
         print(request.FILES)
-        if form.is_valid() and profile_form.is_valid():
-            user_form = form.save()
-            custom_form = profile_form.save(False)
-            custom_form.user = user_form
-            custom_form.save()
-            # return redirect('player_list')
-            return render(request, 'theme/profile.html', {'form': form, 'profile_form': profile_form})
+        form = PostForm(request.POST, request.FILES)
+        mediaform= MediaForm(request.POST, request.FILES)
+
+        # Handle the form submission for creating a new post
+        if form.is_valid() and mediaform.is_valid():
+            print('form.is_valid')
+            print('request.FILES')
+            print(request.FILES)
+            print('mediaform.cleaned_data')
+            print(mediaform.cleaned_data)
+            new_post = form.save(commit=False)
+            
+            # Set the user field to the currently logged-in user
+            new_post.user = request.user
+            # new_post.media.set(request.FILES)
+
+            # Now save the Post instance with the user association
+            new_post.save()
+            media_instance = mediaform.save(commit=False)
+            media_instance.post = new_post  # Associate the media with the newly created post
+            media_instance.save()  # Save the media instance
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            # Refresh posts
+            posts = Post.objects.filter(user=user)
+            posts_with_duration = []
+            liked_posts = Like.objects.filter(user=request.user).values_list('post_id', flat=True)
+
+
+            for post in posts:
+                # Calculate the duration since the post was created
+                duration = timesince(post.created_at)
+                posts_with_duration.append((post, duration))
+
+            posts_with_comments = []
+            for post, duration in posts_with_duration:
+                # Fetch comments for the current post
+                comments = Comment.objects.filter(post=post)
+                posts_with_comments.append((post, duration, comments))
+
+            args['posts'] = posts_with_comments
+            args['liked_posts'] = liked_posts
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            return render(request, 'theme/profile.html', args)
 
         else:
             print('Error kut')
             print(form.errors)
 
-            print('profile_form kut')
-            print(profile_form.errors)
             # form = EditProfileForm(instance=request.user)
             # profile_form = PlayerProfileForm(instance=request.user.player)
 
-            return render(request, 'theme/profile.html', {'form': form, 'profile_form': profile_form, "username":username})
+        return render(request, 'theme/profile.html', args)
 
             # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
 
     else:
-        form = EditProfileForm(instance=request.user)
 
-        player = getattr(request.user, 'player', None)
-        if player is not None:
-            profile_form = PlayerProfileForm(instance=request.user.player)
-            print("player is not None")
+        # player = getattr(request.user, 'player', None)
+        # if player is not None:
+        #     profile_form = PlayerProfileForm(instance=request.user.player)
+        #     print("player is not None")
 
-        scout = getattr(request.user, 'scout', None)
-        if scout is not None:
-            print("scout is not None")
-            profile_form = ScoutProfileForm(instance=request.user.scout)
+        # scout = getattr(request.user, 'scout', None)
+        # if scout is not None:
+        #     print("scout is not None")
+        #     profile_form = ScoutProfileForm(instance=request.user.scout)
 
-        coach = getattr(request.user, 'coach', None)
-        if coach is not None:
-            print("coach is not None")
-            profile_form = CoachProfileForm(instance=request.user.coach)
+        # coach = getattr(request.user, 'coach', None)
+        # if coach is not None:
+        #     print("coach is not None")
+        #     profile_form = CoachProfileForm(instance=request.user.coach)
 
-        args = {}
-        # args.update(csrf(request))
-        args['form'] = form
-        args['profile_form'] = profile_form
-        args['user'] = User.objects.get(username=username)
 
-        
         return render(request, 'theme/profile.html', args)
 
 
@@ -587,7 +653,7 @@ def comment_post(request, post_id, text):
             'first_name': comment.user.first_name,
             'last_name': comment.user.last_name,
             'text': comment.text,
-            'imgurl' : comment.user.getImageUrl,
+            'imgurl' : comment.user.getProfileimageUrl,
             'created_at': comment.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Format the timestamp as needed
         }
         # Return the updated like count as JSON response
@@ -597,6 +663,62 @@ def comment_post(request, post_id, text):
 
 
 
+from django.db.models import Q
+from datetime import date
+
+def discover(request):
+
+    # Get distinct positions and locations from the database
+    distinct_positions = Player.objects.order_by('position').values_list('position', flat=True).distinct()
+    distinct_locations = User.objects.order_by('place').values_list('place', flat=True).distinct()
+    # Exclude 'None' values from distinct_positions and distinct_locations
+    distinct_positions = [pos for pos in distinct_positions if pos is not None]
+    distinct_locations = [loc for loc in distinct_locations if loc is not None]
+
+
+
+
+
+
+
+    if request.method == 'POST':
+        searched = request.POST.get('searched')
+        position = request.POST.get('position')
+        age = request.POST.get('age')
+        location = request.POST.get('location')
+
+        print(searched)
+        print(position)
+        print(age)
+        print(location)
+
+        users = User.objects.filter(
+            Q(first_name__icontains=searched) |
+            Q(last_name__icontains=searched) |
+            Q(email__icontains=searched) |
+            Q(place__icontains=searched) |
+            Q(country__icontains=searched)
+        )
+
+        # Filter by player position
+        if position is not None:
+            users = users.filter(player__position__icontains=position)
+
+        # Filter by age
+        if age is not None:
+            today = date.today()
+            birth_year = today.year - int(age)
+            users = users.filter(date_of_birth__year=birth_year)
+
+        # Filter by location
+        if location is not None:
+            users = users.filter(place__icontains=location)
+
+        return render(request, 'theme/discover.html', {'users': users, 'searched': searched, 'position': position, 'age': age, 'location': location, 'distinct_positions': distinct_positions, 'distinct_locations': distinct_locations})
+    else:
+        users = User.objects.all()
+
+        return render(request, 'theme/discover.html', {'users': users, 'distinct_positions': distinct_positions, 'distinct_locations': distinct_locations})
 
 
 from django.contrib.auth import logout

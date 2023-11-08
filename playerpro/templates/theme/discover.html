@@ -1,0 +1,172 @@
+{% extends 'theme/base.html' %}
+{% load static %}
+{% block content %}
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+   <!-- Hero event START -->
+   <section class="pt-5 pb-0 position-relative" style="background-image: url({% static 'assets/images/bg/07.jpg' %}); background-repeat: no-repeat; background-size: cover; background-position: top center;">
+    <div class="bg-overlay bg-dark opacity-8"></div>
+      <!-- Container START -->
+      <div class="container">
+        <div class="py-5">
+          <div class="row position-relative">
+            <div class="col-lg-9 mx-auto">
+              <div class="text-center">
+                <!-- Title -->
+                <h1 class="text-white">Find football talents</h1>
+                <p class="text-white">Let's uncover the best football talents in the world.</p>
+              </div>
+              <div class="mx-auto bg-mode shadow rounded p-4 mt-5">
+
+
+                <!-- Form START -->
+<form method="POST" action="{% url 'discover' %}" class="row align-items-end g-4">
+  {% csrf_token %}
+  <!-- Search input -->
+  <div class="col-sm-6 col-lg-3">
+      <label class="form-label">Search</label>
+      <input type="text" class="form-control" name="searched" value="{{ searched }}" placeholder="Name, email, place, or country">
+  </div>
+
+  {% comment %} <!-- Age filter -->
+  <div class="col-sm-6 col-lg-3">
+      <label class="form-label">Age</label>
+      <input type="number" class="form-control" name="age" value="{{ age }}">
+  </div> {% endcomment %}
+<!-- Player position filter -->
+<div class="col-sm-6 col-lg-3">
+  <label class="form-label">Player Position</label>
+  <select class="form-select" name="position">
+      <option value="">Select Position</option>
+      {% for pos in distinct_positions %}
+          <option value="{{ pos }}">{{ pos }}</option>
+      {% endfor %}
+  </select>
+</div>
+<!-- Location filter -->
+<div class="col-sm-6 col-lg-3">
+  <label class="form-label">Location</label>
+  <select class="form-select" name="location">
+      <option value="">Select Location</option>
+      {% for loc in distinct_locations %}
+          <option value="{{ loc }}">{{ loc }}</option>
+      {% endfor %}
+  </select>
+</div>
+
+
+
+
+
+
+  <!-- Filter button -->
+  <div class="col-sm-6 col-lg-3">
+      <button type="submit" class="btn btn-primary w-100">Search</button>
+  </div>
+</form>
+<!-- Form END -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> 
+    <!-- Hero event END -->
+  
+  <section class="pt-5">
+    <!-- Container START -->
+    <div class="container">
+
+      
+      <div class="row g-4">
+
+        <!-- Main content START -->
+        <div class="col-12 vstack gap-4">
+
+            <!-- Card START -->
+            <div class="card">
+              <!-- Card header START -->
+              <div class="card-header d-sm-flex align-items-center text-center justify-content-sm-between border-0 pb-0">
+                <h2 class="h4 card-title">Discover Talents</h2>
+                <!-- Button modal -->
+              </div>
+              <!-- Card header START -->
+              <!-- Card body START -->
+              <div class="card-body">
+                <div class="row g-4">
+                  {% for user in users %}
+
+
+
+
+
+                  
+                  <div class="col-sm-6 col-xl-4">
+                    <!-- Event item START -->
+                    <div class="card h-100">
+                      <div class="position-relative">
+                        <img class="img-fluid rounded-top" src="{{ user.getProfileimageUrl }}" alt="">
+                        <div class="badge bg-danger text-white mt-2 me-2 position-absolute top-0 end-0">
+                          Online
+                        </div>
+                      </div>
+                      <!-- Card body START -->
+                      <div class="card-body position-relative pt-0">
+                        <!-- Tag -->
+                        <a class="btn btn-xs btn-primary mt-n3" href="{% url 'profile' username=user.username %}">{{user.player.position}} </a>
+                        <h6 class="mt-3"> <a href="{% url 'profile' username=user.username %}"> {{user.first_name}} {{user.last_name}} </a> </h6>
+                        <!-- Date time -->
+                        <p class="mb-0 small"> <i class="bi bi-calendar-check pe-1"></i> {{user.date_of_birth}} </p>
+                        <p class="small"> <i class="bi bi-geo-alt pe-1"></i> {{user.place}} </p>
+                        <!-- Button -->
+                        <div class="d-flex mt-3 justify-content-between">
+                          <!-- Interested button -->
+                          <div class="w-100">
+                            <input type="checkbox" class="btn-check d-block" id="Interested1">
+                            <label class="btn btn-sm btn-outline-success d-block" for="Interested1"><i class="bi bi-person-plus-fill me-1"></i> Follow</label>
+                          </div>
+                          <div class="dropdown ms-3">
+
+                            <!-- share user link -->
+                            {% comment %} <a href="#" class="btn btn-sm btn-primary-soft" id="eventActionShare" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="bi bi-share-fill"></i>
+                            </a> {% endcomment %}
+                            <!-- Dropdown menu -->
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="eventActionShare">
+                              <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-1"></i> Send via Direct Message</a></li>
+                              <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-1"></i> Share to News Feed </a></li>
+                              <li><a class="dropdown-item" href="#"> <i class="bi bi-people fa-fw pe-1"></i> Share to a group</a></li>
+                              <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-1"></i> Share post via …</a></li>
+                              <li><hr class="dropdown-divider"></li>
+                              <li><a class="dropdown-item" href="#"> <i class="bi bi-person fa-fw pe-1"></i> Share on a friend's profile</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Card body END -->
+                    </div>
+                  <!-- Event item END -->
+                  </div>
+
+
+
+
+                  {%  endfor %}
+
+
+                </div>
+            </div>
+            <!-- Card body END -->
+          </div>
+          <!-- Card END -->
+        </div>
+
+      </div> <!-- Row END -->
+    </div>
+    <!-- Container END -->
+</section>
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+{% endblock content %}
