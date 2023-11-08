@@ -20,3 +20,6 @@ services:
 volumes:
   wagtail-static:
     driver: local
+networks:
+  ng_default:
+    external: true
