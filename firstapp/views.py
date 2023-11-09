@@ -150,12 +150,21 @@ def feed_test(request):
 
 
 
-
+from django.utils.decorators import method_decorator
 
 class PlayerSignUpView(CreateView):
     model = User
     form_class = PlayerSignUpForm
     template_name = 'social/player_signup.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is logged in
+        if self.request.user.is_authenticated:
+            return redirect('feed')
+        else:
+            # User is not logged in, proceed with the normal behavior
+            return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'player'
@@ -726,4 +735,4 @@ from django.contrib.auth import logout
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')

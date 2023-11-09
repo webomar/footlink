@@ -254,26 +254,26 @@
 									<img class="avatar-img rounded-circle" src="{{ request.user.getProfileimageUrl }}" alt="avatar">
 								</div>
 								<div>
-									<a class="h6 stretched-link" href="#">Lori Ferguson</a>
-									<p class="small m-0">Web Developer</p>
+									<a class="h6 stretched-link" href="#">{{request.user.first_name}} {{request.user.last_name}}</a>
+									<p class="small m-0">@{{request.user}}</p>
 								</div>
 							</div>
 							<a class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" href="{% url 'profile' username=request.user.username %}">View profile</a>
 						</li>
 						<!-- Links -->
-						<li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear fa-fw me-2"></i>Settings & Privacy</a></li>
+						<li><a class="dropdown-item" href="#"><i class="bi bi-gear fa-fw me-2"></i>Settings & Privacy</a></li>
 						<li> 
-							<a class="dropdown-item" href="https://support.webestica.com/" target="_blank">
+							<a class="dropdown-item" href="#" target="_blank">
 								<i class="fa-fw bi bi-life-preserver me-2"></i>Support
 							</a> 
 						</li>
 						<li> 
-							<a class="dropdown-item" href="docs/index.html" target="_blank">
+							<a class="dropdown-item" href="#" target="_blank">
 								<i class="fa-fw bi bi-card-text me-2"></i>Documentation
 							</a> 
 						</li>
 						<li class="dropdown-divider"></li>
-						<li><a class="dropdown-item bg-danger-soft-hover" href="sign-in-advance.html"><i class="bi bi-power fa-fw me-2"></i>Sign Out</a></li>
+						<li><a class="dropdown-item bg-danger-soft-hover" href="{% url 'logout' %}"><i class="bi bi-power fa-fw me-2"></i>Sign Out</a></li>
 						<li> <hr class="dropdown-divider"></li>
 						<!-- Dark mode options START -->
 						<li>
