@@ -1,28 +1,21 @@
-version: '3'
+version: '3.7'
 
 services:
-  django:
-    image: django-docker:0.0.1
-
-  wagtail-app:
+  django-guni:
+    volumes:
+      - static:/static
+    env_file:
+      - .env
     build:
       context: .
-    image: wagtail-app:latest
-    container_name: wagtail-container
-    expose:
-      - "8000"
-    environment:
-      - PYTHONUNBUFFERED=1
-      - PORT=8000
-    volumes:
-      - .:/app
-    command: ["gunicorn", "playerpro.wsgi:application"]
-    user: "wagtail"
+    ports:
+      - "8000:8000"
     networks:
       - ng_default
+      
 volumes:
-  wagtail-static:
-    driver: local
+  static:
+    
 networks:
   ng_default:
     external: true
