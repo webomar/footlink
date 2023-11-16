@@ -8,16 +8,3 @@ WORKDIR /app
 COPY ./entrypoint.sh /
 ENTRYPOINT ["sh", "/entrypoint.sh"]
 
-
-
-ENV PYTHONUNBUFFERED=1
-
-
-
-
-
-
-EXPOSE 8000
-
-CMD ["python","manage.py","runserver"]
-
