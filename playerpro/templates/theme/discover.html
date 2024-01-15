@@ -115,7 +115,7 @@
                       <div class="card-body position-relative pt-0">
                         <!-- Tag -->
                         <a class="btn btn-xs btn-primary mt-n3" href="{% url 'profile' username=user.username %}">{{user.player.position}} </a>
-                        <h6 class="mt-3"> <a href="{% url 'profile' username=user.username %}"> {{user.first_name}} {{user.last_name}} </a> </h6>
+                        <h6 class="mt-3"> <a href="{% url 'profile' username=user.username %}"> {{user.getFullName}} </a> </h6>
                         <!-- Date time -->
                         <p class="mb-0 small"> <i class="bi bi-calendar-check pe-1"></i> {{user.date_of_birth}} </p>
                         <p class="small"> <i class="bi bi-geo-alt pe-1"></i> {{user.place}} </p>

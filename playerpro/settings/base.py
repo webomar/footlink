@@ -24,7 +24,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
-    
+    "daphne",
+    "channels",
     "firstapp",
     "home",
     "search",
@@ -50,7 +51,10 @@ INSTALLED_APPS = [
     "wagtail.contrib.modeladmin",
     "bootstrap4",
     "crispy_forms",
-    "crispy_bootstrap4"
+    "crispy_bootstrap4",
+
+
+
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -63,6 +67,7 @@ LOGIN_REDIRECT_URL = 'feed'
 LOGIN_URL = 'login'
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # 'channels.middleware.ChannelsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -92,7 +97,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "playerpro.wsgi.application"
+# WSGI_APPLICATION = "playerpro.wsgi.application"
+ASGI_APPLICATION = 'playerpro.asgi.application'
+# ASGI_APPLICATION = 'playerpro.routing.application'
 
 
 # Database
@@ -228,3 +235,10 @@ import logging
 CSRF_TRUSTED_ORIGINS = [
     'https://footlink-production.up.railway.app'
 ]
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

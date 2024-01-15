@@ -1,0 +1,202 @@
+{% extends 'theme/base.html' %}
+{% load static %}
+{% block content %}
+
+<main>
+  <!-- Container START -->
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Main content START -->
+      <div class="col-lg-8 vstack gap-4">
+        <!-- My profile START -->
+        <div class="card">
+          <!-- Cover image -->
+          <div class="h-200px rounded-top" style="background-image:url({{user.getCoverimageUrl}}); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+          {% include 'theme/profile/cards/body_card.html' %}
+
+            <div class="card-footer mt-3 pt-2 pb-0">
+              <!-- Nav profile pages -->
+              <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'profile' username=user.username %}"> Posts </a> </li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'profile_experience' username=user.username %}"> Experience</a> </li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'profile_connections' username=user.username %}"> Connections <span class="badge bg-success bg-opacity-10 text-success small"> {{num_connections}}</span> </a> </li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'profile_statistics' username=user.username %}"> Statistics</a> </li>
+                <li class="nav-item"> <a class="nav-link active" href="{% url 'profile_media' username=user.username %}"> Media</a> </li>
+              </ul>
+            </div>
+          </div>
+          <!-- My profile END -->
+
+
+          
+
+
+              <!-- Card body START -->
+              <div class="card-body">
+                <!-- Photos of you tab START -->
+                <div class="row g-3">
+
+                  {% for media in user_media %}
+                  <br>
+                  <!-- Photo item START -->
+                  <div class="col-sm-6 col-md-4 col-lg-3">
+                    <!-- Photo -->
+                      <img class="rounded img-fluid" src="{{media.file.url}}" alt="">
+                  </div>
+                  <!-- Photo item END -->
+                  {% endfor %}
+                  
+                </div>
+                <!-- Photos of you tab END -->
+              </div>
+              <!-- Card body END -->
+
+
+
+
+
+
+
+
+
+      </div>
+      <!-- Main content END -->
+
+      <!-- Right sidebar START -->
+      <div class="col-lg-4">
+
+        <div class="row g-4">
+
+          {% include 'theme/profile/cards/about_card.html' %}
+          {% include 'theme/profile/cards/experience_card.html' %}
+          {% include 'theme/profile/cards/statistics_card.html' %}
+          {% include 'theme/profile/cards/media_card.html' %}
+          {% include 'theme/profile/cards/following_card.html' %}
+
+
+
+        </div>
+
+      </div>
+      <!-- Right sidebar END -->
+
+    </div> <!-- Row END -->
+  </div>
+  <!-- Container END -->
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+{% comment %} if he is the owner, render the invisible shit {% endcomment %}
+{% if user == request.user %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{% include 'theme/profile/owner_shit.html' %}
+
+  {% endif %}
+
+  <script>
+    $(document).ready(function () {
+       var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+    
+       $('.like-button').click(function () {
+           var postId = $(this).data('post-id');
+           console.log(postId)
+    
+           $.ajax({
+               type: 'POST',
+               url: '/like_post/' + postId + '/',
+               data: {},
+               headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+               success: function (data) {
+    
+                   if(data.remove == true){
+                    $('#like-text-' + postId).text('Like');
+                    $('#like-button-' + postId).removeClass('active');
+                    $('#like-count-' + postId).text(data.likes_count);
+    
+                   }
+                   else{
+                   // Update the like count for the specific post
+                   $('#like-count-' + postId).text(data.likes_count);
+                   $('#like-text-' + postId).text('Liked');
+                   $('#like-button-' + postId).addClass('active');
+                   }
+                   console.log(data)
+               }
+           });
+       });
+    
+    
+    
+    
+    
+       $('.comment-button').click(function () {
+        var postId = $(this).data('post-id');
+        console.log(postId)
+        var comment_value = $('#comment-text-'+postId).val()
+        console.log('comment_value')
+        console.log(comment_value)
+        $.ajax({
+            type: 'POST',
+            url: '/comment_post/' + postId + '/' + comment_value + '/',
+            data: {},
+            headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+            success: function (data) {
+                // load fucking comments again
+                $('#comment-count-' + postId).text(data.comment_count);
+    
+                // Clear the input field after a successful comment submission
+                $('#comment-text-' + postId).val('');
+    
+                    // Update the comment section with the newly added comment
+                    var commentSection = $('#comment-section-' + postId);
+                    var newCommentHTML = `
+    <li class="comment-item">
+        <div class="d-flex position-relative">
+            <!-- Avatar -->
+            <div class="avatar avatar-xs">
+                <a href="#!">
+                    <img class="avatar-img rounded-circle" src="`+data.comment.imgurl+`" alt="">
+                </a>
+            </div>
+            <div class="ms-2">
+                <!-- Comment by -->
+                <div class="bg-light rounded-start-top-0 p-3 rounded">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-1"> <a href="#!"> `+data.comment.first_name +data.comment.last_name+`</a></h6>
+                        {% comment %} <small class="ms-2">5hr</small> {% endcomment %}
+                    </div>
+                    <p class="small mb-0">`+data.comment.text+`</p>
+                </div>
+                <!-- Comment react -->
+                <ul class="nav nav-divider py-2 small">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!"> Like (3)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!"> Reply</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!"> View 5 replies</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </li>
+    `;
+                    var newComment = '<div class="comment">' +
+                        '<strong>' + data.comment.username + '</strong>: ' +
+                        data.comment.text +
+                        '</div>';
+                    commentSection.prepend(newCommentHTML);
+            }
+        });
+    });
+    });
+    
+    
+    
+    </script>
+{% endblock content %}

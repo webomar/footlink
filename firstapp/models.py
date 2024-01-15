@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+from django.db.models import Q
 
 
 class User(AbstractUser):
@@ -14,18 +15,42 @@ class User(AbstractUser):
     profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     cover_image = models.ImageField(upload_to='cover_images', blank=True, null=True)
     place = models.CharField(max_length=255, null=True)
-    country = models.CharField(max_length=255, null=True)
+    country = models.CharField(max_length=255, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
     phone_number = models.CharField(max_length=20, null=True)
-    media_collection = models.ManyToManyField('Post', related_name='players', blank=True)
+    # media_collection = models.ManyToManyField('Post', related_name='players', blank=True)
     followed_users = models.ManyToManyField('User', related_name='followed')    
     posts = models.ManyToManyField('Post', related_name='player_posts', blank=True)
+    about = models.TextField(null=True, blank=True)
+
+    def getFullName(self):
+        return self.getFirstName()+" "+self.getLastName()
+    
+    def getFirstName(self):
+        if self.first_name:
+            return self.first_name
+        else:
+            return ''
+
+    def getLastName(self):
+        if self.last_name:
+            return self.last_name
+        else:
+            return ''
+
+    def getAbout(self):
+        if not self.about:
+            # depending on your template
+            return 'Nothing to show here...'
+
+        else:
+        # Return the URL of the uploaded image
+            return self.about
 
     def getProfileimageUrl(self):
         if not self.profile_image:
             # depending on your template
             return '/static/profile_placeholder.jpg'
-
         else:
         # Return the URL of the uploaded image
             return self.profile_image.url
@@ -38,7 +63,87 @@ class User(AbstractUser):
         else:
         # Return the URL of the uploaded image
             return self.profile_image.url
+        
+    def connections(self):
+        sent_connections = self.connection_requests_sent.filter(accepted=True)
+        received_connections = self.connection_requests_received.filter(accepted=True)
+        return sent_connections | received_connections
+    
+    def connections_received_onhold(self):
+        received_connections = self.connection_requests_received.filter(accepted=False)
+        return received_connections
 
+    # Get the people whom the user is connected with
+    def connected_users(self):
+        connections = self.connections()
+        connected_users = []
+        for connection in connections:
+            if connection.sender == self:
+                connected_users.append(connection.receiver)
+            else:
+                connected_users.append(connection.sender)
+        return connected_users
+    
+    def is_connected(self, user_id):
+        other_user = User.objects.get(id=user_id)
+        connection_exists = Connection.objects.filter(
+            (Q(sender=self) & Q(receiver=other_user)) | (Q(sender=other_user) & Q(receiver=self)),
+            accepted=True
+        ).exists()
+        return connection_exists
+    
+    def num_connections(self):
+        return self.connections().count()
+
+    def getPosition(self):
+        if self.player:
+            return self.player.position
+        
+    def getClub(self):
+        if self.player:
+            return self.player.club
+        
+class Connection(models.Model):
+    sender = models.ForeignKey(User, related_name='connection_requests_sent', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='connection_requests_received', on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+
+
+class Experience(models.Model):
+    club = models.CharField(max_length=255, null=True, blank=True)
+    place = models.CharField(max_length=255, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True)
+    from_date = models.DateField()
+    to_date = models.DateField(null=True, blank=True)
+    position = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    club_image = models.ImageField(upload_to='club_images', blank=True, null=True)
+
+    def __str__(self):
+        if self.club != None:
+            return self.club
+        else:
+            return 'No Club'
+        
+    def getClubImageUrl(self):
+        if not self.club_image:
+            # depending on your template
+            return '/static/profile_placeholder.jpg'
+
+        else:
+        # Return the URL of the uploaded image
+            return self.club_image.url
+        
+    def get_to_date(self):
+        if not self.to_date:
+            return 'Present'
+        else:
+            return self.to_date
 
 User.add_to_class(
     'following',
@@ -76,8 +181,8 @@ class Player(models.Model):
     ambition = models.TextField(null=True, blank=True)
     goals = models.IntegerField(null=True, blank=True)
     assists = models.IntegerField(null=True, blank=True)
-    passes = models.IntegerField(null=True, blank=True)
-    tackles = models.IntegerField(null=True, blank=True)
+    clean_sheet = models.IntegerField(null=True, blank=True)
+    played_matches = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.user.email
@@ -122,7 +227,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Post(models.Model):
-    text = models.TextField()
+    text = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='liked_posts', through=Like)
@@ -164,9 +269,12 @@ class Media(models.Model):
         return f'{self.get_media_type_display()} #{self.pk}'
 
 
+# models.py
 
+from django.db import models
 
-class Posttest(models.Model):
-    text = models.TextField()
-    image = models.ImageField(upload_to='post_images', blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

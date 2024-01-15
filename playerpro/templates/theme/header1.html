@@ -160,10 +160,10 @@
 					</a>
 				</li>
 				<li class="nav-item dropdown ms-2">
-					{% comment %} <a class="nav-link icon-md btn btn-light p-0" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+					<a class="nav-link icon-md btn btn-light p-0" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
 						<span class="badge-notif animation-blink"></span>
 						<i class="bi bi-bell-fill fs-6"> </i>
-					</a> {% endcomment %}
+					</a>
 					<div class="dropdown-menu dropdown-animation dropdown-menu-end dropdown-menu-size-md p-0 shadow-lg border-0" aria-labelledby="notifDropdown">
 						<div class="card">
 							<div class="card-header d-flex justify-content-between align-items-center">
@@ -172,6 +172,13 @@
 							</div>
 							<div class="card-body p-0">
 								<ul class="list-group list-group-flush list-unstyled p-2">
+
+							<!-- profile.html -->
+
+								<!-- Display user's connections -->
+								{% for connection in request.user.connections_received_onhold %}
+
+
 									<!-- Notif item -->
 									<li>
 										<div class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3">
@@ -180,46 +187,43 @@
 											</div>
 											<div class="ms-sm-3">
 												<div class=" d-flex">
-												<p class="small mb-2"><b>Judy Nguyen</b> sent you a friend request.</p>
-												<p class="small ms-3 text-nowrap">Just now</p>
+												<p class="small mb-2"><b>{{ connection.sender.username }}</b> sent you a connection request.</p>
+												<p class="small ms-3 text-nowrap">{{ connection.created_at }}</p>
 											</div>
 											<div class="d-flex">
-												<button class="btn btn-sm py-1 btn-primary me-2">Accept </button>
-												<button class="btn btn-sm py-1 btn-danger-soft">Delete </button>
+												<button class="btn btn-sm py-1 btn-primary me-2 accept-connection" data-connection-id="{{ connection.id }}">Accept </button>
+												<button class="btn btn-sm py-1 btn-danger-soft delete-connection" data-connection-id="{{ connection.id }}">Delete </button>
 											</div>
 										</div>
 									</div>
 									</li>
-									<!-- Notif item -->
-									<li>
-										<div class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3 position-relative">
-											<div class="avatar text-center d-none d-sm-inline-block">
-												<img class="avatar-img rounded-circle" src="{% static 'assets/images/avatar/02.jpg' %}" alt="">
-											</div>
-											<div class="ms-sm-3 d-flex">
-												<div>
-													<p class="small mb-2">Wish <b>Amanda Reed</b> a happy birthday (Nov 12)</p>
-													<button class="btn btn-sm btn-outline-light py-1 me-2">Say happy birthday 🎂</button>
-												</div>
-												<p class="small ms-3">2min</p>
-											</div>
-										</div>
-									</li>
-									<!-- Notif item -->
-									<li>
-										<a href="#" class="list-group-item list-group-item-action rounded d-flex border-0 mb-1 p-3">
-											<div class="avatar text-center d-none d-sm-inline-block">
-												<div class="avatar-img rounded-circle bg-success"><span class="text-white position-absolute top-50 start-50 translate-middle fw-bold">WB</span></div>
-											</div>
-											<div class="ms-sm-3">
-												<div class="d-flex">
-													<p class="small mb-2">Webestica has 15 like and 1 new activity</p>
-													<p class="small ms-3">1hr</p>
-												</div>
-											</div>
-										</a>
-									</li>
-									<!-- Notif item -->
+
+										{% comment %} <form method="post" action="{% url 'accept_connection_request' connection.id %}">
+											{% csrf_token %}
+											<button type="submit">Accept</button>
+										</form>
+										<form method="post" action="{% url 'decline_connection_request' connection.id %}">
+											{% csrf_token %}
+											<button type="submit">Decline</button>
+										</form> {% endcomment %}
+
+
+									{% endfor %}
+
+								{% comment %} <!-- Display sent connection requests -->
+								<h2>Sent Connection Requests</h2>
+								{% for connection in user.connection_requests_sent.all %}
+									{{ connection.receiver.username }}
+									{% if not connection.accepted %}
+										(Pending)
+									{% endif %}
+								{% endfor %} {% endcomment %}
+
+
+
+
+
+									{% comment %} <!-- Notif item -->
 									<li>
 										<a href="#" class="list-group-item list-group-item-action rounded d-flex border-0 p-3 mb-1">
 											<div class="avatar text-center d-none d-sm-inline-block">
@@ -230,7 +234,12 @@
 												<p class="small ms-3">4hr</p>
 											</div>
 										</a>
-									</li>
+									</li> {% endcomment %}
+
+
+
+
+
 								</ul>
 							</div>
 							<div class="card-footer text-center">
@@ -254,7 +263,7 @@
 									<img class="avatar-img rounded-circle" src="{{ request.user.getProfileimageUrl }}" alt="avatar">
 								</div>
 								<div>
-									<a class="h6 stretched-link" href="#">{{request.user.first_name}} {{request.user.last_name}}</a>
+									<a class="h6 stretched-link" href="#">{{request.user.getFullName}}</a>
 									<p class="small m-0">@{{request.user}}</p>
 								</div>
 							</div>
@@ -310,4 +319,64 @@
 		</div>
 	</nav>
 	<!-- Logo Nav END -->
+
+
+
+
+
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".accept-connection").on("click", function () {
+            var connectionId = $(this).data("connection-id");
+
+            $.ajax({
+                type: "POST",
+                url: "/accept_connection/" + connectionId + "/",
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',  // Include CSRF token if not using @csrf_exempt decorator
+					// Include any additional data you want to send
+				},
+                success: function (data) {
+                    if (data.success) {
+                        // Handle success, e.g., update UI
+                        console.log("Connection request accepted successfully");
+						location.reload();
+                    }
+                },
+                error: function (error) {
+                    console.log("Error accepting connection request", error);
+                }
+            });
+        });
+
+        $(".delete-connection").on("click", function () {
+            var connectionId = $(this).data("connection-id");
+
+            $.ajax({
+                type: "POST",
+                url: "/delete_connection/" + connectionId + "/",
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',  // Include CSRF token if not using @csrf_exempt decorator
+					// Include any additional data you want to send
+				},
+                success: function (data) {
+                    if (data.success) {
+                        // Handle success, e.g., update UI
+                        console.log("Connection request deleted successfully");
+						location.reload();
+						
+					}
+                },
+                error: function (error) {
+                    console.log("Error deleting connection request", error);
+                }
+            });
+        });
+    });
+</script>
+
+
 </header>

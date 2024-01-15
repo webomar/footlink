@@ -1,0 +1,41 @@
+
+          <!-- Card START -->
+          <div class="col-md-6 col-lg-12">
+            <div class="card">
+              <!-- Card header START -->
+              <div class="card-header d-flex justify-content-between border-0">
+                <h5 class="card-title">Experience</h5>
+        <a class="btn btn-primary-soft btn-sm" href="{% url 'profile_experience' username=user.username %}"> See all</a>
+
+                {% comment %} <a class="btn btn-primary-soft btn-sm" href="#!"> <i class="fa-solid fa-plus"></i> </a> {% endcomment %}
+                {% if request.user == user %}
+                  <a class="btn btn-primary-soft btn-sm" href="#!" data-bs-toggle="modal" data-bs-target="#profileActionExp"> <i class="fa-solid fa-plus"></i></a>
+                {% endif %}
+                {% comment %} <a class="btn btn-primary-soft btn-sm" href="#!" data-bs-toggle="modal" data-bs-target="#feedActionVideo"> <i class="fa-solid fa-plus">sdf</i></a> {% endcomment %}
+              </div>
+              <!-- Card header END -->
+              <!-- Card body START -->
+              <div class="card-body position-relative pt-0">
+                {% for exp in exps|slice:":3" %}
+                <!-- Experience item START -->
+                <div class="d-flex">
+                  <!-- Avatar -->
+                  <div class="avatar me-3">
+                    {% comment %} <a href="#!"> <img class="avatar-img rounded-circle" src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png" alt=""> </a> {% endcomment %}
+                    <a href="#!"> <img class="avatar-img rounded-circle" src="{{exp.getClubImageUrl}}" alt=""> </a>
+                  </div>
+                  <!-- Info -->
+                  <div>
+                    <h6 class="card-title mb-0"><a href="#!"> {{exp.position}} at {{exp.club}} </a></h6>
+                    <p style="margin-bottom:2px;" class="small">{{exp.description}} {% comment %} <a class="btn btn-primary-soft btn-xs ms-2" href="#!">Edit </a>{% endcomment %}</p> 
+                    <p class="small"><b>{{exp.from_date}}</b> to <b>{{exp.get_to_date}}</b> as <b>{{exp.position}}</b></p>
+                  </div>
+                </div>
+                <!-- Experience item END -->
+                {% endfor %}
+              </div>
+              <!-- Card body END -->
+            </div>
+          </div>
+          <!-- Card END -->
+        

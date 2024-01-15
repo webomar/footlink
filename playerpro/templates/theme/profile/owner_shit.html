@@ -1,0 +1,539 @@
+
+<!-- Modal create events START -->
+<div class="modal fade" id="profileActionExp" tabindex="-1" aria-labelledby="modalLabelCreateAlbum" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelCreateAlbum">Add experience</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Modal feed header END -->
+      <!-- Modal feed body START -->
+      <div class="modal-body">
+        <!-- Form START -->
+        <form id="experience-form" enctype="multipart/form-data">
+          {% csrf_token %}
+          <!-- Title -->
+          <div class="col-12">
+            <label class="form-label">Club</label>
+            <input type="text" id="club" class="form-control" placeholder="Club name here">
+          </div>
+          <br>
+          <!-- Position -->
+          <div class="col-12">
+            <label class="form-label">Position</label>
+            <input type="text" id="position" class="form-control" placeholder="Position here">
+          </div>
+          <br>
+          <!-- Description -->
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea id="description" class="form-control" rows="2" placeholder="Ex: topics, schedule, etc."></textarea>
+          </div>
+          <br>
+          <!-- Date start -->
+          <div class="col-sm-4">
+            <label class="form-label">Date start</label>
+            <input type="text" id="from_date" class="form-control flatpickr" placeholder="Select date">
+          </div>
+          <br>
+          <!-- Still there -->
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="still_there">
+            <label class="form-check-label">
+              Still there?
+            </label>
+          </div>
+          <br>
+          <!-- Date end -->
+          <div class="col-sm-4">
+            <label class="form-label">Date end</label>
+            <input type="text" id="to_date" class="form-control flatpickr" placeholder="Select date">
+            <br>
+          
+          </div>
+          <!-- Place -->
+          <div class="col-12">
+            <label class="form-label">Place</label>
+            <input type="text" id="place" class="form-control" placeholder="Logansport, IN 46947">
+          </div>
+          <br>
+
+          <!-- Dropzone photo START -->
+          <div id="div_id_profile_image" class="form-group"> 
+            <label class="">
+            Club logo
+            </label> 
+            <div> 
+              <input type="file" name="club_image" accept="image/*" class="clearablefileinput form-control-file" id="id_club_image"> 
+            </div> 
+          </div>
+          <!-- Dropzone photo END -->
+        </form>
+        <!-- Form END -->
+      </div>
+      <!-- Modal feed body END -->
+      <!-- Modal footer -->
+      <!-- Button -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>
+        <button type="button" id="addExp" class="btn btn-success-soft">Add experience</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create events END -->
+
+
+
+
+<!-- Modal create events START -->
+<div class="modal fade" id="profileActionGoal" tabindex="-1" aria-labelledby="modalLabelCreateAlbum" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelCreateAlbum">Add goals</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Modal feed header END -->
+      <!-- Modal feed body START -->
+      <div class="modal-body">
+        <!-- Form START -->
+        <form id="goal-form" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Title -->
+          <div class="col-12">
+            <label class="form-label">Goals number</label>
+            <input type="number" value="{{user.player.goals}}" id="goals" class="form-control" placeholder="Goals number here">
+          </div>
+
+        </form>
+        <!-- Form END -->
+      </div>
+      <!-- Modal feed body END -->
+      <!-- Modal footer -->
+      <!-- Button -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>
+        <button type="button" id="addGoals" class="btn btn-success-soft">Save statistics</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create events END -->
+
+
+
+
+
+
+
+
+
+
+<!-- Modal create events START -->
+<div class="modal fade" id="profileActionAssist" tabindex="-1" aria-labelledby="modalLabelCreateAlbum" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelCreateAlbum">Add goals</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Modal feed header END -->
+      <!-- Modal feed body START -->
+      <div class="modal-body">
+        <!-- Form START -->
+        <form id="goal-form" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Title -->
+          <div class="col-12">
+            <label class="form-label">Assists number</label>
+            <input type="number" value="{{user.player.assists}}" id="assists" class="form-control" placeholder="Assists number here">
+          </div>
+
+        </form>
+        <!-- Form END -->
+      </div>
+      <!-- Modal feed body END -->
+      <!-- Modal footer -->
+      <!-- Button -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>
+        <button type="button" id="addAssists" class="btn btn-success-soft">Save assists</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create events END -->
+
+
+
+
+
+
+
+
+
+<!-- Modal create events START -->
+<div class="modal fade" id="profileActionCleanSheet" tabindex="-1" aria-labelledby="modalLabelCreateAlbum" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelCreateAlbum">Add cleant sheet number:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Modal feed header END -->
+      <!-- Modal feed body START -->
+      <div class="modal-body">
+        <!-- Form START -->
+        <form id="goal-form" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Title -->
+          <div class="col-12">
+            <label class="form-label">Clean sheet number</label>
+            <input type="number" value="{{user.player.clean_sheet}}" id="clean_sheet" class="form-control" placeholder="Clean sheet number here">
+          </div>
+
+        </form>
+        <!-- Form END -->
+      </div>
+      <!-- Modal feed body END -->
+      <!-- Modal footer -->
+      <!-- Button -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>
+        <button type="button" id="addCleanSheet" class="btn btn-success-soft">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create events END -->
+
+
+
+
+
+
+
+
+
+<!-- Modal create events START -->
+<div class="modal fade" id="profileActionPlayedMatches" tabindex="-1" aria-labelledby="modalLabelCreateAlbum" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelCreateAlbum">Add played matches number:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Modal feed header END -->
+      <!-- Modal feed body START -->
+      <div class="modal-body">
+        <!-- Form START -->
+        <form id="goal-form" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Title -->
+          <div class="col-12">
+            <label class="form-label">Played matches number</label>
+            <input type="number" value="{{user.player.played_matches}}" id="played_matches" class="form-control" placeholder="Played matches number here">
+          </div>
+
+        </form>
+        <!-- Form END -->
+      </div>
+      <!-- Modal feed body END -->
+      <!-- Modal footer -->
+      <!-- Button -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>
+        <button type="button" id="addPlayedMatches" class="btn btn-success-soft">Save statistics</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal create events END -->
+
+
+
+
+<script>
+  $(document).ready(function () {
+      $('#addExp').click(function () {
+          // Collect form data
+          var formData = new FormData();
+          formData.append('club', $('#club').val());
+          formData.append('description', $('#description').val());
+          formData.append('from_date', $('#from_date').val());
+          formData.append('to_date', $('#to_date').val());
+          formData.append('place', $('#place').val());
+          formData.append('position', $('#position').val());
+          formData.append('user', '{{ request.user.id }}'); // Add this line to include the user ID
+          
+          var clubImageInput = $('#id_club_image')[0];
+        
+          // Check if a file is selected
+          if (clubImageInput.files.length > 0) {
+              formData.append('club_image', clubImageInput.files[0]);
+          }
+
+          // Display formData values for debugging
+          formData.forEach(function(value, key){
+            console.log(key + ': ' + value);
+          });
+          // Add other form fields as needed
+
+          var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+
+          // Perform Ajax request
+          $.ajax({
+              type: 'POST',
+              url: '/create_experience/',  // Replace with your actual URL
+              data: formData,
+              processData: false,
+              contentType: false,
+              headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+
+              success: function (data) {
+                  if (data.success) {
+                      // alert(data.message);
+                      // Redirect or perform other actions on success
+                      // $('#profileActionExp').modal('hide');
+                      location.reload();
+
+                  } else {
+                      alert('Error: ' + data.errors);
+                  }
+              },
+              error: function (xhr, status, error) {
+                  alert('Error: ' + error);
+              }
+          });
+      });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+      $('#addGoals').click(function () {
+          // Collect form data
+          var formData = new FormData();
+          formData.append('goals', $('#goals').val());
+          
+          // Display formData values for debugging
+          formData.forEach(function(value, key){
+            console.log(key + ': ' + value);
+          });
+          // Add other form fields as needed
+
+          var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+
+          // Perform Ajax request
+          $.ajax({
+              type: 'POST',
+              url: '/create_player_goals/',  // Replace with your actual URL
+              data: formData,
+              processData: false,
+              contentType: false,
+              headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+
+              success: function (data) {
+                  if (data.success) {
+                      // Redirect or perform other actions on success
+                      $('#profileActionGoal').modal('hide');
+                      $('.goals_value').text($('#goals').val());
+
+                  } else {
+                      alert('Error: ' + data.errors);
+                  }
+              },
+              error: function (xhr, status, error) {
+                  alert('Error: ' + error);
+              }
+          });
+      });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+      $('#addAssists').click(function () {
+          // Collect form data
+          var formData = new FormData();
+          formData.append('assists', $('#assists').val());
+          
+          // Display formData values for debugging
+          formData.forEach(function(value, key){
+            console.log(key + ': ' + value);
+          });
+          // Add other form fields as needed
+
+          var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+
+          // Perform Ajax request
+          $.ajax({
+              type: 'POST',
+              url: '/create_player_assists/',  // Replace with your actual URL
+              data: formData,
+              processData: false,
+              contentType: false,
+              headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+
+              success: function (data) {
+                  if (data.success) {
+                      // Redirect or perform other actions on success
+                      $('#profileActionAssist').modal('hide');
+                      $('.assists_value').text($('#assists').val());
+
+                  } else {
+                      alert('Error: ' + data.errors);
+                  }
+              },
+              error: function (xhr, status, error) {
+                  alert('Error: ' + error);
+              }
+          });
+      });
+  });
+</script>
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+      $('#addCleanSheet').click(function () {
+          var cleanSheetValue = $('#clean_sheet').val();
+
+          // Collect form data
+          var formData = new FormData();
+          formData.append('clean_sheet', cleanSheetValue);
+          
+          // Display formData values for debugging
+          formData.forEach(function(value, key){
+            console.log(key + ': ' + value);
+          });
+          // Add other form fields as needed
+
+          var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+
+          // Perform Ajax request
+          $.ajax({
+              type: 'POST',
+              url: '/create_player_cleansheet/',  // Replace with your actual URL
+              data: formData,
+              processData: false,
+              contentType: false,
+              headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+
+              success: function (data) {
+                  if (data.success) {
+                      // Redirect or perform other actions on success
+                      $('#profileActionCleanSheet').modal('hide');
+                      $('.clean_sheet_value').text(cleanSheetValue);
+
+                  } else {
+                      alert('Error: ' + data.errors);
+                  }
+              },
+              error: function (xhr, status, error) {
+                  alert('Error: ' + error);
+              }
+          });
+      });
+  });
+</script>
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+      $('#addPlayedMatches').click(function () {
+          // Collect form data
+          var formData = new FormData();
+          formData.append('played_matches', $('#played_matches').val());
+          
+          // Display formData values for debugging
+          formData.forEach(function(value, key){
+            console.log(key + ': ' + value);
+          });
+          // Add other form fields as needed
+
+          var csrfToken = $('input[name=csrfmiddlewaretoken]').val(); // Get the CSRF token
+
+          // Perform Ajax request
+          $.ajax({
+              type: 'POST',
+              url: '/create_player_playedmatches/',  // Replace with your actual URL
+              data: formData,
+              processData: false,
+              contentType: false,
+              headers: { "X-CSRFToken": csrfToken }, // Include the CSRF token in the headers
+
+              success: function (data) {
+                  if (data.success) {
+                      // Redirect or perform other actions on success
+                      $('#profileActionPlayedMatches').modal('hide');
+                      $('.played_matches_value').text($('#played_matches').val());
+
+                  } else {
+                      alert('Error: ' + data.errors);
+                  }
+              },
+              error: function (xhr, status, error) {
+                  alert('Error: ' + error);
+              }
+          });
+      });
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+      $('#still_there').change(function() {
+          if (this.checked) {
+              // If the checkbox is checked, hide the "Date end" input
+              $('#to_date').parent().hide(); // Assumes the parent of the input is the div with class "col-sm-4"
+          } else {
+              // If the checkbox is unchecked, show the "Date end" input
+              $('#to_date').parent().show();
+          }
+      });
+  });
+  </script>

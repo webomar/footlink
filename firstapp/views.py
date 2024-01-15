@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import views as auth_views
 from .decorators import coach_required, player_required, scout_required
 
-from .forms import PlayerSignUpForm, CoachSignUpForm, LoginForm, PostFormTest, ScoutSignUpForm, UserPlayerUpdateForm, EditProfileForm, PlayerProfileForm, ScoutProfileForm, CoachProfileForm
+from .forms import PlayerAssistForm, PlayerCleanSheetForm, PlayerGoalForm, PlayerPlayedMatchesForm, PlayerSignUpForm, CoachSignUpForm, LoginForm, PlayerStatsForm, ScoutSignUpForm, UserPlayerUpdateForm, EditProfileForm, PlayerProfileForm, ScoutProfileForm, CoachProfileForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView
 
@@ -22,7 +22,7 @@ from django.contrib.auth import login
 #         form = PlayerRegistrationForm()
 #     return render(request, 'registration/player_registration.html', {'form': form})
 
-from .models import Player, Post
+from .models import Experience, Player, Post
 
 def home(request):
     return render(request, 'home.html')
@@ -45,24 +45,25 @@ def feed(request):
     if request.method == 'POST':
         # Handle the form submission for creating a new post
         if form.is_valid() and mediaform.is_valid():
-            print('form.is_valid')
-            print('request.FILES')
-            print(request.FILES)
-            print('mediaform.cleaned_data')
+            print(form.cleaned_data)
             print(mediaform.cleaned_data)
-            new_post = form.save(commit=False)
-            
-            # Set the user field to the currently logged-in user
-            new_post.user = request.user
-            # new_post.media.set(request.FILES)
+            if form.cleaned_data['text'] is not '' or mediaform.cleaned_data['file'] is not None:
+                new_post = form.save(commit=False)
+                
+                # Set the user field to the currently logged-in user
+                new_post.user = request.user
+                # new_post.media.set(request.FILES)
+                # Now save the Post instance with the user association
+                new_post.save()
+                media_instance = mediaform.save(commit=False)
+                media_instance.post = new_post  # Associate the media with the newly created post
+                media_instance.save()  # Save the media instance
+                # form.save()
+                return redirect('feed')  # Redirect to the feed after a successful post submission
 
-            # Now save the Post instance with the user association
-            new_post.save()
-            media_instance = mediaform.save(commit=False)
-            media_instance.post = new_post  # Associate the media with the newly created post
-            media_instance.save()  # Save the media instance
-            # form.save()
-            return redirect('feed')  # Redirect to the feed after a successful post submission
+            else:
+                print("niet goed")
+
         else:
             print('not valid')
             print(form.errors)
@@ -89,60 +90,6 @@ def feed(request):
     users = User.objects.all()
     
     return render(request, 'theme/index.html', {'posts': posts_with_comments, 'form':form, 'mediaform':mediaform, 'users':users, 'liked_posts':liked_posts})
-
-
-
-
-
-
-
-
-
-
-
-@login_required
-def feed_test(request):
-    form = PostFormTest(request.POST, request.FILES)
-
-    if request.method == 'POST':
-        # Handle the form submission for creating a new post
-        if form.is_valid():
-            new_post = form.save(commit=False)
-            
-            # Set the user field to the currently logged-in user
-            new_post.user = request.user
-
-            # Now save the Post instance with the user association
-            new_post.save()
-
-            # form.save()
-            return redirect('feed')  # Redirect to the feed after a successful post submission
-
-    posts = Post.objects.all()
-    
-    return render(request, 'feed.html', {'posts': posts, 'form':form})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -473,6 +420,99 @@ def edit_account(request):
 
 
 
+@login_required
+def profile_experience(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+    return render(request, 'theme/profile/profile_experience.html', args)
+
+
+
+@login_required
+def profile_connections(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+
+    args['num_connections'] = user.num_connections()
+
+
+    args['connected_users'] = user.connected_users()
+
+
+
+
+    return render(request, 'theme/profile/profile_connections.html', args)
+
+
+
+@login_required
+def profile_statistics(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+    return render(request, 'theme/profile/profile_statistics.html', args)
+
+
+from .models import User, Media
+
+@login_required
+def profile_media(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+
+    #     # Retrieve all media associated with the user
+    # user_media = user.media_collection.all()
+
+    # # Separate media into images and videos
+    # user_images = [media for media in user_media if media.is_image()]
+    # user_videos = [media for media in user_media if media.is_video()]
+    # # all_user_videos = [media for media in user_media]
+
+    # args['user_images'] = user_images
+    # args['user_videos'] = user_videos
+    # args['all_user_media'] = user_media
+
+
+        # Retrieve all media associated with the user
+    user_media = Media.objects.filter(post__user=user).exclude(file__exact='')
+    args['user_media'] = user_media
+
+
+
+    return render(request, 'theme/profile/profile_media.html', args)
+
+
 
 
 @login_required
@@ -481,7 +521,13 @@ def profile(request, username):
     user = User.objects.get(username=username)
     args['user'] = user
 
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
     posts = Post.objects.filter(user=user)
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+
     posts_with_duration = []
     liked_posts = Like.objects.filter(user=request.user).values_list('post_id', flat=True)
 
@@ -499,6 +545,7 @@ def profile(request, username):
 
     args['posts'] = posts_with_comments
     args['liked_posts'] = liked_posts
+    args['exps'] = exps
     
     if request.method == 'POST':
         print('request.method == post')
@@ -526,17 +573,6 @@ def profile(request, username):
             media_instance.save()  # Save the media instance
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             # Refresh posts
             posts = Post.objects.filter(user=user)
             posts_with_duration = []
@@ -557,15 +593,12 @@ def profile(request, username):
             args['posts'] = posts_with_comments
             args['liked_posts'] = liked_posts
             
+
+
             
             
             
-            
-            
-            
-            
-            
-            return render(request, 'theme/profile.html', args)
+            return render(request, 'theme/profile/profile.html', args)
 
         else:
             print('Error kut')
@@ -574,34 +607,54 @@ def profile(request, username):
             # form = EditProfileForm(instance=request.user)
             # profile_form = PlayerProfileForm(instance=request.user.player)
 
-        return render(request, 'theme/profile.html', args)
+        return render(request, 'theme/profile/profile.html', args)
 
             # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
 
     else:
 
-        # player = getattr(request.user, 'player', None)
-        # if player is not None:
-        #     profile_form = PlayerProfileForm(instance=request.user.player)
-        #     print("player is not None")
-
-        # scout = getattr(request.user, 'scout', None)
-        # if scout is not None:
-        #     print("scout is not None")
-        #     profile_form = ScoutProfileForm(instance=request.user.scout)
-
-        # coach = getattr(request.user, 'coach', None)
-        # if coach is not None:
-        #     print("coach is not None")
-        #     profile_form = CoachProfileForm(instance=request.user.coach)
+        connection_request_sent = Connection.objects.filter(sender=request.user, receiver=user, accepted=False).exists()
+        connection_request_received = Connection.objects.filter(sender=user, receiver=request.user, accepted=False).exists()
+        connection_request_accepted = Connection.objects.filter(
+                Q(sender=user, receiver=request.user, accepted=True) |
+                Q(sender=request.user, receiver=user, accepted=True)
+            ).exists()
 
 
-        return render(request, 'theme/profile.html', args)
+        args['connection_request_sent'] = connection_request_sent
+        args['connection_request_received'] = connection_request_received
+        args['connection_request_accepted'] = connection_request_accepted
+        
+        print('connection_request_accepted')
+        print(connection_request_accepted)
+        print(connection_request_accepted)
+
+        if connection_request_received:
+            connection_request_received_id = Connection.objects.filter(sender=user, receiver=request.user).first().id
+            args['connection_request_received_id'] = connection_request_received_id
+
+        if connection_request_sent:
+            connection_request_sent_id = Connection.objects.filter(sender=request.user, receiver=user).first().id
+            
+            zxc = Connection.objects.filter(sender=request.user, receiver=user)
+            print(zxc)
+            print(zxc)
+            print(zxc)
+            print(zxc)
+            print(zxc)
+            args['connection_request_sent_id'] = connection_request_sent_id
+
+
+        if connection_request_accepted:
+            connection_request_accepted_id = Connection.objects.filter(
+                Q(sender=user, receiver=request.user, accepted=True) |
+                Q(sender=request.user, receiver=user, accepted=True)
+            ).first().id
+            args['connection_request_accepted_id'] = connection_request_accepted_id
 
 
 
-
-
+        return render(request, 'theme/profile/profile.html', args)
 
 
 
@@ -629,7 +682,6 @@ from django.http import JsonResponse
 
 def like_post(request, post_id):
     if request.method == 'POST':
-
 
         # Remove variable is used by JQuery to set style and text based on action (like, unlike)
         remove = False
@@ -669,6 +721,101 @@ def comment_post(request, post_id, text):
         return JsonResponse({'comments_count': comments_count, 'comment':response_data})
 
 
+from .forms import ExperienceForm
+from .models import Experience
+
+def create_experience(request):
+    if request.method == 'POST':
+        form = ExperienceForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(form.cleaned_data)
+            experience = form.save()
+            # return redirect('profile', username=request.user.username)
+
+            return JsonResponse({'success': True, 'message': 'Experience created successfully'})
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({'success': False, 'errors': errors})
+
+    # form = ExperienceForm()
+    # return render(request, 'create_experience.html', {'form': form})
+
+
+def create_player_stats(request):
+    if request.method == 'POST':
+        form = PlayerStatsForm(request.POST)
+        if form.is_valid():
+            print('suck')
+            player_instance = form.save(commit=False)
+            player_instance.user = request.user
+            player_instance.save()
+            print(player_instance)
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors.as_json()}, status=400)
+
+
+def create_player_goals(request):
+    if request.method == 'POST':
+        form = PlayerGoalForm(request.POST)
+        if form.is_valid():
+            goals_number = form.cleaned_data['goals']
+            player_instance = get_object_or_404(Player, user=request.user)
+            player_instance.goals = goals_number
+            player_instance.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors.as_json()}, status=400)
+
+
+
+def create_player_assists(request):
+    if request.method == 'POST':
+        form = PlayerAssistForm(request.POST)
+        if form.is_valid():
+            assists = form.cleaned_data['assists']
+            player_instance = get_object_or_404(Player, user=request.user)
+            player_instance.assists = assists
+            player_instance.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors.as_json()}, status=400)
+
+
+
+
+
+def create_player_cleansheet(request):
+    if request.method == 'POST':
+        form = PlayerCleanSheetForm(request.POST)
+        if form.is_valid():
+            clean_sheet = form.cleaned_data['clean_sheet']
+            player_instance = get_object_or_404(Player, user=request.user)
+            player_instance.clean_sheet = clean_sheet
+            player_instance.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors.as_json()}, status=400)
+
+
+
+
+
+def create_player_playedmatches(request):
+    if request.method == 'POST':
+        form = PlayerPlayedMatchesForm(request.POST)
+        if form.is_valid():
+            print('suck')
+            player_instance = form.save(commit=False)
+            player_instance.user = request.user
+            player_instance.save()
+            print(player_instance)
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors.as_json()}, status=400)
+
 
 
 
@@ -683,12 +830,6 @@ def discover(request):
     # Exclude 'None' values from distinct_positions and distinct_locations
     distinct_positions = [pos for pos in distinct_positions if pos is not None]
     distinct_locations = [loc for loc in distinct_locations if loc is not None]
-
-
-
-
-
-
 
     if request.method == 'POST':
         searched = request.POST.get('searched')
@@ -736,3 +877,90 @@ from django.contrib.auth import logout
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+from .models import Connection
+from django.contrib import messages
+
+def send_connection(request, username):
+    if request.method == 'POST':
+        receiver = get_object_or_404(User, username=username)
+
+        # Check if a connection already exists
+        existing_connection = Connection.objects.filter(sender=request.user, receiver=receiver).first()
+
+        if existing_connection:
+            return JsonResponse({'success': False, 'message': 'Connection already exists'})
+        else:
+            # Create a new connection
+            connection = Connection.objects.create(sender=request.user, receiver=receiver)
+            return JsonResponse({'success': True, 'message': 'Connection request sent'})
+
+    # Handle other HTTP methods if needed
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import JsonResponse
+from .models import Connection
+
+def accept_connection(request, connection_id):
+    connection = get_object_or_404(Connection, id=connection_id, receiver=request.user, accepted=False)
+    connection.accepted = True
+    connection.save()
+    return JsonResponse({'success': True})
+
+def delete_connection(request, connection_id):
+    # connection = get_object_or_404(Connection, id=connection_id, receiver=request.user)
+    print(connection_id)
+    print(connection_id)
+    
+
+    
+    connection1 = Connection.objects.filter(id=connection_id, sender=request.user).first()
+    print('connection1')
+    print(connection1)
+    
+    connection2 = Connection.objects.filter(id=connection_id, receiver=request.user).first()
+
+    print('connection2')
+    print(connection2)
+
+    if connection1:
+        print('if connection1:')
+        connection1.delete()
+    else:
+        print('else')
+        connection2.delete()
+
+
+
+
+
+    # connection = Connection.objects.filter(id=connection_id, receiver=request.user).first()
+    # connection.delete()
+
+    return JsonResponse({'success': True})
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Message
+from django.db import models
+
+@login_required
+def chat(request, user_username):
+    receiver = get_object_or_404(User, username=user_username)
+    messages = Message.objects.filter(
+        (models.Q(sender=request.user) & models.Q(receiver=receiver)) |
+        (models.Q(sender=receiver) & models.Q(receiver=request.user))
+    ).order_by('timestamp')
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        Message.objects.create(sender=request.user, receiver=receiver, content=content)
+    # if request.method == 'GET':
+    #     return JsonResponse({'messages': messages})
+
+    return render(request, 'chat/chat.html', {'receiver': receiver, 'messages': messages})

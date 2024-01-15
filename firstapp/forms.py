@@ -1,7 +1,7 @@
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import transaction
-from .models import Like, Post, Posttest, User, Coach, Player, Scout, Zaakwaarnemer, Media
+from .models import Like, Post, User, Coach, Player, Scout, Zaakwaarnemer, Media
 from django import forms
 from django.contrib.auth import get_user_model
 
@@ -182,6 +182,22 @@ class EditProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['date_of_birth'].widget = DateInput(attrs={'type': 'date'})
 
+from django import forms
+from .models import Experience
+
+class ExperienceForm(forms.ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['club', 'user', 'from_date', 'to_date', 'position', 'description', 'club_image', 'place']
+        required = {
+            'to_date': False,
+        }
+    def __init__(self, *args, **kwargs):
+        super(ExperienceForm, self).__init__(*args, **kwargs)
+        # Add customizations or widgets if needed
+        # For example, you can add a date picker widget for date fields:
+        self.fields['from_date'].widget.attrs.update({'class': 'datepicker'})
+        self.fields['to_date'].widget.attrs.update({'class': 'datepicker'})
 
 class EditUserForm69(forms.ModelForm):
     class Meta:
@@ -247,18 +263,6 @@ class MediaForm(forms.ModelForm):
 
 
 
-class PostFormTest(forms.ModelForm):
-    class Meta:
-        model = Posttest
-        fields = ['text', 'image']
-
-
-
-
-
-
-
-
 
 
 
@@ -269,3 +273,38 @@ class LikeForm(forms.ModelForm):
     class Meta:
         model = Like
         fields = []
+
+
+
+class PlayerStatsForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = ['clean_sheet', 'assists', 'goals', 'played_matches']
+
+
+
+
+
+class PlayerGoalForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = ['goals']
+
+
+
+class PlayerAssistForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = ['assists']
+
+
+class PlayerCleanSheetForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = ['clean_sheet']
+
+
+class PlayerPlayedMatchesForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = ['played_matches']

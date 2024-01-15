@@ -1,0 +1,111 @@
+{% load static %}
+          <!-- Card START -->
+          <div class="col-md-6 col-lg-12">
+            <div class="card">
+              <!-- Card header START -->
+              <div class="card-header d-flex justify-content-between border-0">
+                <h5 class="card-title">Statistics</h5>
+                {% comment %} <a class="btn btn-primary-soft btn-sm" href="#!"> <i class="fa-solid fa-plus"></i> </a> {% endcomment %}
+
+                {% comment %} <a class="btn btn-primary-soft btn-sm" href="#!" data-bs-toggle="modal" data-bs-target="#feedActionVideo"> <i class="fa-solid fa-plus">sdf</i></a> {% endcomment %}
+              </div>
+              <!-- Card header END -->
+
+              
+              <!-- Card body START -->
+              <div class="card-body position-relative pt-0">
+                <div class="card-body position-relative pt-0">
+                  <div class="row g-3">
+
+
+                    <div class="col-6">
+                      <div class="card shadow-none text-center h-100">
+                        <!-- Card body -->
+                        <div class="card-body p-2 pb-0">
+                          <div class="avatar">
+                            <img class="avatar-img" src="{% static 'images/goal.png' %}" alt="">
+                          </div>
+                          <h6 class="card-title mb-1 mt-3"> Goals:</h6>
+                          <p id="goals_value" class="mb-0 small lh-sm goals_value">{{user.player.goals}}</p>
+                        </div>
+                        <!-- Card footer -->
+                        {% if request.user == user %}
+                        <div class="card-footer p-2 border-0">
+                          <button  data-bs-toggle="modal" data-bs-target="#profileActionGoal" class="btn btn-sm btn-primary" title="Edit..."> <i class="bi bi-pencil-fill"></i> </button>
+                          {% comment %} <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button> {% endcomment %}
+                        </div>
+                        {% endif %}
+
+                      </div>
+                    </div>
+
+
+
+
+                    <div class="col-6">
+                      <div class="card shadow-none text-center h-100">
+                        <!-- Card body -->
+                        <div class="card-body p-2 pb-0">
+                          <div class="avatar">
+                            <img class="avatar-img" src="{% static 'images/football2.png' %}" alt="">
+                          </div>
+                          <h6 class="card-title mb-1 mt-3"> Assists:</h6>
+                          <p id="assists_value" class="mb-0 small lh-sm assists_value">{{user.player.assists}}</p>
+                        </div>
+                        <!-- Card footer -->
+                        {% if request.user == user %}
+                        <div class="card-footer p-2 border-0 profile-owner-item">
+                          <button  data-bs-toggle="modal" data-bs-target="#profileActionAssist" class="btn btn-sm btn-primary" title="Edit..."> <i class="bi bi-pencil-fill"></i> </button>
+                          {% comment %} <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button> {% endcomment %}
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    
+
+                    <div class="col-6">
+                      <div class="card shadow-none text-center h-100">
+                        <!-- Card body -->
+                        <div class="card-body p-2 pb-0">
+                          <div class="avatar">
+                            <img class="avatar-img" src="{% static 'images/football.png' %}" alt="">
+                          </div>
+                          <h6 class="card-title mb-1 mt-3"> Clean sheet:</h6>
+                          <p id="clean_sheet_value" class="mb-0 small lh-sm clean_sheet_value">{{user.player.clean_sheet}}</p>
+                        </div>
+                        <!-- Card footer -->
+                        {% if request.user == user %}
+                        <div class="card-footer p-2 border-0">
+                          <button  data-bs-toggle="modal" data-bs-target="#profileActionCleanSheet" class="btn btn-sm btn-primary" title="Edit..."> <i class="bi bi-pencil-fill"></i> </button>
+                          {% comment %} <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button> {% endcomment %}
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+  
+                    <div class="col-6">
+                      <div class="card shadow-none text-center h-100">
+                        <!-- Card body -->
+                        <div class="card-body p-2 pb-0">
+                          <div class="avatar">
+                            <img class="avatar-img" src="{% static 'images/flag.png' %}" alt="">
+                          </div>
+                          <h6 class="card-title mb-1 mt-3"> Played matches:</h6>
+                          <p id="played_matches_value" class="mb-0 small lh-sm played_matches_value">{{user.player.played_matches}}</p>
+                        </div>
+                        <!-- Card footer -->
+                        {% if request.user == user %}
+                        <div class="card-footer p-2 border-0">
+                          <button  data-bs-toggle="modal" data-bs-target="#profileActionPlayedMatches" class="btn btn-sm btn-primary" title="Edit..."> <i class="bi bi-pencil-fill"></i> </button>
+                          {% comment %} <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button> {% endcomment %}
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Card body END -->
+            </div>
+          </div>
+          <!-- Card END -->

@@ -15,7 +15,7 @@
               <div class="card-body p-0">
                   <div class="d-flex align-items-center">
                       <div class="p-5">
-                          <h2 class="fw-bolder">{{player.user.first_name}} {{player.user.last_name}}</h2>
+                          <h2 class="fw-bolder">{{player.user.getFullName}}</h2>
                           <h5>{{player.user.email}}</h5>
                           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius at enim eum illum aperiam placeat esse? Mollitia omnis minima saepe recusandae libero, iste ad asperiores! Explicabo commodi quo itaque! Ipsam!</p>
                           <a class="btn btn-primary btn-sm px-5 py-3 me-sm-3 fs-6 fw-bolder" href="{% url 'player_detail' player.pk %}">More</a>

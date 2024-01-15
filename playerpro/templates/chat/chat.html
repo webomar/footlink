@@ -1,0 +1,150 @@
+<!-- templates/chat/chat.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Chat with {{ receiver.username }}</h2>
+
+<div id="chat-box">
+    {% for message in messages %}
+        <p>{{ message.sender.username }}: {{ message.content }}</p>
+    {% endfor %}
+</div>
+
+
+<div id="messages"></div>
+
+<form id='form' method="post" action="">
+    {% csrf_token %}
+    <input type="text" id="username_receiver" value="{{receiver.username}}" hidden>
+    <input type="text" id="username_sender" value="{{user.username}}" hidden>
+    <input type="text" name="content" id="content" required>
+    <button type="button" id="sendButton">Send</button>
+</form>
+
+<script></script>
+{% comment %} 
+<script>
+    const url = 'ws://' + window.location.host + '/ws/chat/';
+    const ws = new WebSocket(url)
+    ws.onopen = function(event) {
+        console.log('Connection is open')
+    }
+
+    ws.onmessage = function(event) {
+        console.log(event)
+        console.log('Message is received')
+    }
+
+    ws.onclose = function(event) {
+        console.log(event)
+        console.log('conn is closed')
+    }
+
+    ws.onerror = function(event) {
+        console.log(event)
+        console.log('something went wrong')
+    }
+
+    ws.disconnect = function(event) {
+        console.log(event)
+        console.log('something went wrong')
+    }
+</script> {% endcomment %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    var username_receiver = $('#username_receiver').val();
+    var username_sender = $('#username_sender').val();
+
+    function updateMessages() {
+        $.ajax({
+            type: 'GET',
+            url: '/chat/'+username_receiver+'/', // Replace "your_chat_url" with your actual URL
+            success: function (data) {
+                console.log('updateMessages')
+                console.log(data)
+                $('#messages-container').html(data);
+            }
+        });
+    }
+
+    const url = 'ws://' + window.location.host + '/ws/chat/';
+    const ws = new WebSocket(url)
+    ws.onopen = function(event) {
+        console.log('Connection is open')
+    }
+
+    ws.onmessage = function(e) {
+        console.log(e)
+        console.log('Message is received')
+        let data = JSON.parse(e.data)
+        console.log(data)
+
+        if(data.type == 'chat'){
+            let messages = document.getElementById('messages')
+            console.log('dit is in onmessage')
+            messages.insertAdjacentHTML('beforeend', '<div><p>'+data.sender+': '+data.content+'</p></div>')
+        }
+    }
+
+    ws.onclose = function(event) {
+        console.log(event)
+        console.log('conn is closed')
+    }
+
+    ws.onerror = function(event) {
+        console.log(event)
+        console.log('something went wrong')
+    }
+
+    ws.disconnect = function(event) {
+        console.log(event)
+        console.log('something went wrong')
+    }
+
+
+    let form = document.getElementById('form')
+    form.addEventListener('submit', (e)=> {
+        let content = e.target.content.value 
+        ws.send(JSON.stringify({
+            'content':content
+        }))
+    })
+
+    $(document).ready(function () {
+
+        // Send message with AJAX
+        $('#sendButton').click(function () {
+            var content = $('#content').val();
+            console.log(username_receiver)
+            $.ajax({
+                type: 'POST',
+                url: '/chat/'+username_receiver+'/', // Replace "your_chat_url" with your actual URL
+                data: { content: content, csrfmiddlewaretoken: '{{ csrf_token }}' },
+                success: function () {
+                    // Clear the input field
+                    $('#content').val('');
+
+                }
+            });
+
+            ws.send(JSON.stringify({
+                'content':content,
+                'sender':username_sender,
+                'receiver':username_receiver
+            }))
+
+
+        });
+    });
+</script>
+
+
+
+
+{% endblock %}
