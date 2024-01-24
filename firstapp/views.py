@@ -964,3 +964,20 @@ def chat(request, user_username):
     #     return JsonResponse({'messages': messages})
 
     return render(request, 'chat/chat.html', {'receiver': receiver, 'messages': messages})
+
+
+@login_required
+def chat2(request, user_username):
+    receiver = get_object_or_404(User, username=user_username)
+    messages = Message.objects.filter(
+        (models.Q(sender=request.user) & models.Q(receiver=receiver)) |
+        (models.Q(sender=receiver) & models.Q(receiver=request.user))
+    ).order_by('timestamp')
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        Message.objects.create(sender=request.user, receiver=receiver, content=content)
+    # if request.method == 'GET':
+    #     return JsonResponse({'messages': messages})
+
+    return render(request, 'chat/chat2.html', {'receiver': receiver, 'messages': messages})

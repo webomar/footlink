@@ -80,6 +80,7 @@ urlpatterns = [
     # path("chat/", views.chat_view, name="chat-page"),
 
     path('chat/<str:user_username>/', views.chat, name='chat'),
+    path('chat2/<str:user_username>/', views.chat2, name='chat2'),
 
 ]
 

@@ -24,8 +24,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",
-    "channels",
+    # "daphne",
+    # "channels",
     "firstapp",
     "home",
     "search",
@@ -97,8 +97,8 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = "playerpro.wsgi.application"
-ASGI_APPLICATION = 'playerpro.asgi.application'
+WSGI_APPLICATION = "playerpro.wsgi.application"
+# ASGI_APPLICATION = 'playerpro.asgi.application'
 # ASGI_APPLICATION = 'playerpro.routing.application'
 
 
