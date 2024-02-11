@@ -26,6 +26,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     # "daphne",
     # "channels",
+    "corsheaders",
     "firstapp",
     "home",
     "search",
@@ -66,6 +67,7 @@ AUTH_USER_MODEL = 'firstapp.User'
 LOGIN_REDIRECT_URL = 'feed'
 LOGIN_URL = 'login'
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     # 'channels.middleware.ChannelsMiddleware',
     "django.middleware.common.CommonMiddleware",
@@ -76,7 +78,10 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
-
+CORS_ALLOWED_ORIGINS = [
+    "https://normal-room-testing.up.railway.app",
+    # Add any other allowed origins if needed
+]
 ROOT_URLCONF = "playerpro.urls"
 
 TEMPLATES = [
