@@ -66,7 +66,6 @@ AUTH_USER_MODEL = 'firstapp.User'
 LOGIN_REDIRECT_URL = 'feed'
 LOGIN_URL = 'login'
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     # 'channels.middleware.ChannelsMiddleware',
     "django.middleware.common.CommonMiddleware",
