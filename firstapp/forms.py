@@ -1,7 +1,7 @@
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import transaction
-from .models import Like, Post, User, Coach, Player, Scout, Zaakwaarnemer, Media
+from .models import Agent, Like, Post, User, Coach, Player, Scout, Zaakwaarnemer, Media
 from django import forms
 from django.contrib.auth import get_user_model
 
@@ -49,26 +49,42 @@ class CoachSignUpForm(UserCreationForm):
         coach = Coach.objects.create(user=user)
         return user
 
-class ScoutSignUpForm(UserCreationForm):
-    email = forms.EmailField(widget=forms.EmailInput())
-    password1 = forms.CharField(widget=forms.PasswordInput())
-    password2 = forms.CharField(widget=forms.PasswordInput())
-
-    first_name = forms.CharField(widget=forms.TextInput())
-    last_name = forms.CharField(widget=forms.TextInput())
-    subject = forms.CharField(widget=forms.TextInput())
+class AgentSignUpForm(UserCreationForm):
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Username'}))  # Add this line
+    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
+    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password', 'label':'popo'}))
 
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
-    
+
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_scout = True
         if commit:
             user.save()
-        scout = Scout.objects.create(user=user, first_name=self.cleaned_data.get('first_name'), last_name=self.cleaned_data.get('last_name'), subject=self.cleaned_data.get('subject'))
+        agent = Agent.objects.create(user=user)
+        return user
+
+class ScoutSignUpForm(UserCreationForm):
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Username'}))  # Add this line
+    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
+    password1 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    password2 = forms.CharField(label="", widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password', 'label':'popo'}))
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+
+    @transaction.atomic
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_scout = True
+        if commit:
+            user.save()
+        scout = Scout.objects.create(user=user)
         return user
 
 
@@ -228,11 +244,19 @@ class PlayerProfileForm(forms.ModelForm):
 class ScoutProfileForm(forms.ModelForm):
     class Meta:
         model = Scout
-        exclude = ['user', 'followed_players', 'media_collection', 'posts']
+        exclude = ['user', 'player_notes', 'posts']
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        print(self.fields)
         # self.fields['profile_image'].required = False
-
+class AgentProfileForm(forms.ModelForm):
+    class Meta:
+        model = Agent
+        exclude = ['user', 'player_notes', 'posts']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print(self.fields)
+        # self.fields['profile_image'].required = False
 
 class CoachProfileForm(forms.ModelForm):
     class Meta:
@@ -308,3 +332,18 @@ class PlayerPlayedMatchesForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = ['played_matches']
+
+
+from .models import Vacancy
+
+class VacancyForm(forms.ModelForm):
+    class Meta:
+        model = Vacancy
+        fields = ['title', 'description', 'place']
+
+# forms.py
+from django import forms
+from .models import Vacancy, Player
+
+class ApplicationForm(forms.Form):
+    player = forms.ModelChoiceField(queryset=Player.objects.all(), empty_label=None, label='Select a Player')

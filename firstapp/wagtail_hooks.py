@@ -1,4 +1,4 @@
-from .models import Coach, Player, Scout, Zaakwaarnemer, Post
+from .models import Coach, Player, Scout, Zaakwaarnemer, Post, Vacancy
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from django.contrib.auth import get_user_model
 
@@ -42,4 +42,10 @@ class UserAdmin(ModelAdmin):
     model = User
     menu_icon = 'user'
     menu_label = 'Users'
+
+@modeladmin_register
+class VacancyAdmin(ModelAdmin):
+    model = Vacancy
+    menu_icon = 'user'
+    menu_label = 'Vacancy'
 

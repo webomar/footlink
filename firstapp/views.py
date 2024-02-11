@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import views as auth_views
 from .decorators import coach_required, player_required, scout_required
 
-from .forms import PlayerAssistForm, PlayerCleanSheetForm, PlayerGoalForm, PlayerPlayedMatchesForm, PlayerSignUpForm, CoachSignUpForm, LoginForm, PlayerStatsForm, ScoutSignUpForm, UserPlayerUpdateForm, EditProfileForm, PlayerProfileForm, ScoutProfileForm, CoachProfileForm
+from .forms import AgentProfileForm, AgentSignUpForm, PlayerAssistForm, PlayerCleanSheetForm, PlayerGoalForm, PlayerPlayedMatchesForm, PlayerSignUpForm, CoachSignUpForm, LoginForm, PlayerStatsForm, ScoutSignUpForm, UserPlayerUpdateForm, EditProfileForm, PlayerProfileForm, ScoutProfileForm, CoachProfileForm, VacancyForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView
 
@@ -22,7 +22,7 @@ from django.contrib.auth import login
 #         form = PlayerRegistrationForm()
 #     return render(request, 'registration/player_registration.html', {'form': form})
 
-from .models import Experience, Player, Post
+from .models import Experience, Player, Post, Vacancy
 
 def home(request):
     return render(request, 'home.html')
@@ -102,7 +102,7 @@ from django.utils.decorators import method_decorator
 class PlayerSignUpView(CreateView):
     model = User
     form_class = PlayerSignUpForm
-    template_name = 'social/player_signup.html'
+    template_name = 'accounts/player_signup.html'
 
     def dispatch(self, request, *args, **kwargs):
         # Check if the user is logged in
@@ -133,25 +133,97 @@ class PlayerSignUpView(CreateView):
         return render(self.request, self.template_name, {'form': form})
 
 
-class CoachSignUpView(CreateView):
-    model = User
-    form_class = CoachSignUpForm
-    template_name = 'coaches/coach_signup.html'
-    print('kopkop')
+# class CoachSignUpView(CreateView):
+#     model = User
+#     form_class = CoachSignUpForm
+#     template_name = 'coaches/coach_signup.html'
+#     print('kopkop')
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'coach'
-        return super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         kwargs['user_type'] = 'coach'
+#         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('coach-home')
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect('coach-home')
 
 
 
 
 class ScoutSignUpView(CreateView):
+    model = User
+    form_class = ScoutSignUpForm
+    template_name = 'accounts/scout_signup.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is logged in
+        if self.request.user.is_authenticated:
+            return redirect('feed')
+        else:
+            # User is not logged in, proceed with the normal behavior
+            return super().dispatch(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'scout'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('edit_account_scout')
+
+
+    def form_invalid(self, form):
+        # Print the form errors to the console
+        print('invaliddddddd')
+        for field, errors in form.errors.items():
+            for error in errors:
+                print(f"Form validation error in field '{field}': {error}")
+        # return HttpResponse(status=400)
+        return render(self.request, self.template_name, {'form': form})
+
+
+
+
+class AgentSignUpView(CreateView):
+    model = User
+    form_class = AgentSignUpForm
+    template_name = 'accounts/agent_signup.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is logged in
+        if self.request.user.is_authenticated:
+            return redirect('feed')
+        else:
+            # User is not logged in, proceed with the normal behavior
+            return super().dispatch(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'scout'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('edit_account_agent')
+
+
+    def form_invalid(self, form):
+        # Print the form errors to the console
+        print('invaliddddddd')
+        for field, errors in form.errors.items():
+            for error in errors:
+                print(f"Form validation error in field '{field}': {error}")
+        # return HttpResponse(status=400)
+        return render(self.request, self.template_name, {'form': form})
+
+
+
+
+class ScoutSignUpView2(CreateView):
     model = User
     form_class = ScoutSignUpForm
     template_name = 'scouts/scout_signup.html'
@@ -418,7 +490,131 @@ def edit_account(request):
         return render(request, 'theme/settings.html', args)
 
 
+@login_required
+def edit_account_scout(request):
+    if request.method == 'POST':
+        print('request.method == post')
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        profile_form = ScoutProfileForm(request.POST, instance=request.user.scout)  # request.FILES is show the selected image or file
 
+        print("request.FILES")
+        print("request.FILES")
+        print("request.FILES")
+        # print(request.POST)
+        print(request.FILES)
+        if form.is_valid() and profile_form.is_valid():
+            print("form.is_valid")
+
+            user_form = form.save()
+            custom_form = profile_form.save(False)
+            custom_form.user = user_form
+            custom_form.save()
+            # return redirect('player_list')
+            return render(request, 'theme/edit_account_scout.html', {'form': form, 'profile_form': profile_form})
+
+        else:
+            print('Error kut')
+            print(form.errors)
+
+            print('profile_form kut')
+            print(profile_form.errors)
+            # form = EditProfileForm(instance=request.user)
+            # profile_form = PlayerProfileForm(instance=request.user.player)
+
+            return render(request, 'theme/edit_account_scout.html', {'form': form, 'profile_form': profile_form})
+
+            # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
+
+    else:
+        args = {}
+
+        # form = EditProfileForm(instance=request.user)
+        # # form = EditUserForm69(instance=request.user)
+
+        # player = getattr(request.user, 'player', None)
+        # if player is not None:
+        #     profile_form = PlayerProfileForm(instance=request.user.player)
+        #     print("player is not None")
+
+        # scout = getattr(request.user, 'scout', None)
+        # if scout is not None:
+        #     print("scout is not None")
+        #     profile_form = ScoutProfileForm(instance=request.user.scout)
+
+        # coach = getattr(request.user, 'coach', None)
+        # if coach is not None:
+        #     print("coach is not None")
+        #     profile_form = CoachProfileForm(instance=request.user.coach)
+
+        # # args.update(csrf(request))
+        # args['form'] = form
+        # args['profile_form'] = profile_form
+        
+        return render(request, 'theme/edit_account_scout.html', args)
+
+
+
+@login_required
+def edit_account_agent(request):
+    if request.method == 'POST':
+        print('request.method == post')
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        profile_form = AgentProfileForm(request.POST, instance=request.user.agent)  # request.FILES is show the selected image or file
+
+        print("request.FILES")
+        print("request.FILES")
+        print("request.FILES")
+        # print(request.POST)
+        print(request.FILES)
+        if form.is_valid() and profile_form.is_valid():
+            print("form.is_valid")
+
+            user_form = form.save()
+            custom_form = profile_form.save(False)
+            custom_form.user = user_form
+            custom_form.save()
+            # return redirect('player_list')
+            return render(request, 'theme/edit_account_agent.html', {'form': form, 'profile_form': profile_form})
+
+        else:
+            print('Error kut')
+            print(form.errors)
+
+            print('profile_form kut')
+            print(profile_form.errors)
+            # form = EditProfileForm(instance=request.user)
+            # profile_form = PlayerProfileForm(instance=request.user.player)
+
+            return render(request, 'theme/edit_account_agent.html', {'form': form, 'profile_form': profile_form})
+
+            # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
+
+    else:
+        args = {}
+
+        # form = EditProfileForm(instance=request.user)
+        # # form = EditUserForm69(instance=request.user)
+
+        # player = getattr(request.user, 'player', None)
+        # if player is not None:
+        #     profile_form = PlayerProfileForm(instance=request.user.player)
+        #     print("player is not None")
+
+        # scout = getattr(request.user, 'scout', None)
+        # if scout is not None:
+        #     print("scout is not None")
+        #     profile_form = ScoutProfileForm(instance=request.user.scout)
+
+        # coach = getattr(request.user, 'coach', None)
+        # if coach is not None:
+        #     print("coach is not None")
+        #     profile_form = CoachProfileForm(instance=request.user.coach)
+
+        # # args.update(csrf(request))
+        # args['form'] = form
+        # args['profile_form'] = profile_form
+        
+        return render(request, 'theme/edit_account_agent.html', args)
 
 @login_required
 def profile_experience(request, username):
@@ -434,6 +630,38 @@ def profile_experience(request, username):
     args['num_connections'] = num_connections
 
     return render(request, 'theme/profile/profile_experience.html', args)
+
+
+
+@login_required
+def agent_profile_experience(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+    return render(request, 'theme/profile/agent_profile/agent_profile_experience.html', args)
+
+@login_required
+def scout_profile_experience(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+    return render(request, 'theme/profile/scout_profile/scout_profile_experience.html', args)
 
 
 
@@ -457,6 +685,40 @@ def profile_connections(request, username):
 
     return render(request, 'theme/profile/profile_connections.html', args)
 
+
+@login_required
+def agent_profile_connections(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+
+    args['num_connections'] = user.num_connections()
+
+
+    args['connected_users'] = user.connected_users()
+
+    return render(request, 'theme/profile/agent_profile/agent_profile_connections.html', args)
+
+@login_required
+def scout_profile_connections(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+
+    args['num_connections'] = user.num_connections()
+
+
+    args['connected_users'] = user.connected_users()
+
+    return render(request, 'theme/profile/scout_profile/scout_profile_connections.html', args)
 
 
 @login_required
@@ -512,7 +774,76 @@ def profile_media(request, username):
 
     return render(request, 'theme/profile/profile_media.html', args)
 
+@login_required
+def agent_profile_media(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
 
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+
+    #     # Retrieve all media associated with the user
+    # user_media = user.media_collection.all()
+
+    # # Separate media into images and videos
+    # user_images = [media for media in user_media if media.is_image()]
+    # user_videos = [media for media in user_media if media.is_video()]
+    # # all_user_videos = [media for media in user_media]
+
+    # args['user_images'] = user_images
+    # args['user_videos'] = user_videos
+    # args['all_user_media'] = user_media
+
+
+        # Retrieve all media associated with the user
+    user_media = Media.objects.filter(post__user=user).exclude(file__exact='')
+    args['user_media'] = user_media
+
+
+
+    return render(request, 'theme/profile/agent_profile/agent_profile_media.html', args)
+
+
+@login_required
+def scout_profile_media(request, username):
+    args = {}
+    user = User.objects.get(username=username)
+    args['user'] = user
+
+    exps = Experience.objects.filter(user=user).order_by('-to_date')
+    args['exps'] = exps
+
+    connections = Connection.objects.filter(Q(sender=user, accepted=True) | Q(receiver=user, accepted=True))
+    num_connections = connections.count()
+    args['num_connections'] = num_connections
+
+
+    #     # Retrieve all media associated with the user
+    # user_media = user.media_collection.all()
+
+    # # Separate media into images and videos
+    # user_images = [media for media in user_media if media.is_image()]
+    # user_videos = [media for media in user_media if media.is_video()]
+    # # all_user_videos = [media for media in user_media]
+
+    # args['user_images'] = user_images
+    # args['user_videos'] = user_videos
+    # args['all_user_media'] = user_media
+
+
+        # Retrieve all media associated with the user
+    user_media = Media.objects.filter(post__user=user).exclude(file__exact='')
+    args['user_media'] = user_media
+
+
+
+    return render(request, 'theme/profile/scout_profile/scout_profile_media.html', args)
 
 
 @login_required
@@ -547,113 +878,53 @@ def profile(request, username):
     args['liked_posts'] = liked_posts
     args['exps'] = exps
     
-    if request.method == 'POST':
-        print('request.method == post')
-        print(request.FILES)
-        form = PostForm(request.POST, request.FILES)
-        mediaform= MediaForm(request.POST, request.FILES)
-
-        # Handle the form submission for creating a new post
-        if form.is_valid() and mediaform.is_valid():
-            print('form.is_valid')
-            print('request.FILES')
-            print(request.FILES)
-            print('mediaform.cleaned_data')
-            print(mediaform.cleaned_data)
-            new_post = form.save(commit=False)
-            
-            # Set the user field to the currently logged-in user
-            new_post.user = request.user
-            # new_post.media.set(request.FILES)
-
-            # Now save the Post instance with the user association
-            new_post.save()
-            media_instance = mediaform.save(commit=False)
-            media_instance.post = new_post  # Associate the media with the newly created post
-            media_instance.save()  # Save the media instance
-            
-            
-            # Refresh posts
-            posts = Post.objects.filter(user=user)
-            posts_with_duration = []
-            liked_posts = Like.objects.filter(user=request.user).values_list('post_id', flat=True)
 
 
-            for post in posts:
-                # Calculate the duration since the post was created
-                duration = timesince(post.created_at)
-                posts_with_duration.append((post, duration))
 
-            posts_with_comments = []
-            for post, duration in posts_with_duration:
-                # Fetch comments for the current post
-                comments = Comment.objects.filter(post=post)
-                posts_with_comments.append((post, duration, comments))
+    # Omarios: if req.post: post social media from profile page
 
-            args['posts'] = posts_with_comments
-            args['liked_posts'] = liked_posts
-            
+    connection_request_sent = Connection.objects.filter(sender=request.user, receiver=user, accepted=False).exists()
+    connection_request_received = Connection.objects.filter(sender=user, receiver=request.user, accepted=False).exists()
+    connection_request_accepted = Connection.objects.filter(
+            Q(sender=user, receiver=request.user, accepted=True) |
+            Q(sender=request.user, receiver=user, accepted=True)
+        ).exists()
 
 
-            
-            
-            
-            return render(request, 'theme/profile/profile.html', args)
+    args['connection_request_sent'] = connection_request_sent
+    args['connection_request_received'] = connection_request_received
+    args['connection_request_accepted'] = connection_request_accepted
+    
+    print('connection_request_accepted')
+    print(connection_request_accepted)
+    print(connection_request_accepted)
 
-        else:
-            print('Error kut')
-            print(form.errors)
+    if connection_request_received:
+        connection_request_received_id = Connection.objects.filter(sender=user, receiver=request.user).first().id
+        args['connection_request_received_id'] = connection_request_received_id
 
-            # form = EditProfileForm(instance=request.user)
-            # profile_form = PlayerProfileForm(instance=request.user.player)
-
-        return render(request, 'theme/profile/profile.html', args)
-
-            # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
-
-    else:
-
-        connection_request_sent = Connection.objects.filter(sender=request.user, receiver=user, accepted=False).exists()
-        connection_request_received = Connection.objects.filter(sender=user, receiver=request.user, accepted=False).exists()
-        connection_request_accepted = Connection.objects.filter(
-                Q(sender=user, receiver=request.user, accepted=True) |
-                Q(sender=request.user, receiver=user, accepted=True)
-            ).exists()
-
-
-        args['connection_request_sent'] = connection_request_sent
-        args['connection_request_received'] = connection_request_received
-        args['connection_request_accepted'] = connection_request_accepted
+    if connection_request_sent:
+        connection_request_sent_id = Connection.objects.filter(sender=request.user, receiver=user).first().id
         
-        print('connection_request_accepted')
-        print(connection_request_accepted)
-        print(connection_request_accepted)
-
-        if connection_request_received:
-            connection_request_received_id = Connection.objects.filter(sender=user, receiver=request.user).first().id
-            args['connection_request_received_id'] = connection_request_received_id
-
-        if connection_request_sent:
-            connection_request_sent_id = Connection.objects.filter(sender=request.user, receiver=user).first().id
-            
-            zxc = Connection.objects.filter(sender=request.user, receiver=user)
-            print(zxc)
-            print(zxc)
-            print(zxc)
-            print(zxc)
-            print(zxc)
-            args['connection_request_sent_id'] = connection_request_sent_id
+        zxc = Connection.objects.filter(sender=request.user, receiver=user)
+        print(zxc)
+        args['connection_request_sent_id'] = connection_request_sent_id
 
 
-        if connection_request_accepted:
-            connection_request_accepted_id = Connection.objects.filter(
-                Q(sender=user, receiver=request.user, accepted=True) |
-                Q(sender=request.user, receiver=user, accepted=True)
-            ).first().id
-            args['connection_request_accepted_id'] = connection_request_accepted_id
+    if connection_request_accepted:
+        connection_request_accepted_id = Connection.objects.filter(
+            Q(sender=user, receiver=request.user, accepted=True) |
+            Q(sender=request.user, receiver=user, accepted=True)
+        ).first().id
+        args['connection_request_accepted_id'] = connection_request_accepted_id
 
 
+    if hasattr(user, 'scout') and user.scout:
 
+        return render(request, 'theme/profile/scout_profile/scout_profile.html', args)
+    elif hasattr(user, 'agent') and user.agent:
+        return render(request, 'theme/profile/agent_profile/agent_profile.html', args)
+    else:
         return render(request, 'theme/profile/profile.html', args)
 
 
@@ -981,3 +1252,47 @@ def chat2(request, user_username):
     #     return JsonResponse({'messages': messages})
 
     return render(request, 'chat/chat2.html', {'receiver': receiver, 'messages': messages})
+
+
+@login_required
+def vacancies(request):
+    vacancies = Vacancy.objects.all()
+    return render(request, 'vacancies/vacancies.html', {'vacancies': vacancies})
+
+@login_required
+def create_vacancy(request):
+    if request.method == 'POST':
+        form = VacancyForm(request.POST)
+        if form.is_valid():
+            vacancy = form.save(commit=False)
+            vacancy.agent = request.user.agent
+            vacancy.save()
+            return redirect('vacancies')
+    else:
+        form = VacancyForm()
+
+    return render(request, 'vacancies/create_vacancy.html', {'form': form})
+
+from .forms import ApplicationForm
+
+def vacancy_detail(request, vacancy_id):
+    vacancy = Vacancy.objects.get(id=vacancy_id)
+    related_vacancies = Vacancy.objects.all().exclude(id=vacancy.id)[:3]
+
+
+    if request.method == 'POST':
+        player = request.user.player
+
+        if player in vacancy.appliers.all():
+            vacancy.appliers.remove(player)
+            vacancy.save()
+        else:
+            vacancy.appliers.add(player)
+            vacancy.save()
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'vacancies/vacancy_detail.html', {'vacancy': vacancy, 'related_vacancies':related_vacancies})
+
+
+

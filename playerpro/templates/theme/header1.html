@@ -6,7 +6,7 @@
 		<div class="container">
 			<!-- Logo START -->
 			<a class="navbar-brand" href="{% url 'feed' %}">
-				<img class="navbar-brand-item" src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png" alt="logo">
+				<img class="navbar-brand-item" src="{% static 'images/logo.png' %}" alt="logo">
 				
 				{% comment %} <img class="light-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo">
 				<img class="dark-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo"> {% endcomment %}
@@ -30,7 +30,7 @@
 					<div class="nav-item w-100">
 						<form class="rounded position-relative" method="post" action="{% url 'discover' %}">
 							{% csrf_token %}
-							<input class="form-control ps-5 bg-light" type="search" placeholder="Search..." aria-label="Search" name="searched">
+							<input class="form-control ps-5 bg-light" type="search" placeholder="Search..." value="{% if request.user.player %}This is player{% elif request.user.scout %}This is scout{% elif request.user.agent %}This is agent{% endif %}" aria-label="Search" name="searched">
 							<button class="btn bg-transparent px-2 py-0 position-absolute top-50 start-0 translate-middle-y" type="submit"><i class="bi bi-search fs-5"> </i></button>
 						</form>
 					</div>
@@ -155,7 +155,12 @@
 					</a>
 				</li> {% endcomment %}
 				<li class="nav-item ms-2">
-					<a class="nav-link icon-md btn btn-light p-0" href="{% url 'edit_account' %}">
+					<a class="nav-link icon-md btn btn-light p-0" href="{% url 'vacancies' %}">
+						<i class="bi bi-briefcase-fill fs-6"> </i>
+					</a>
+				</li>
+				<li class="nav-item ms-2">
+					<a class="nav-link icon-md btn btn-light p-0" href="{% if user.scout %}{% url 'edit_account_scout' %}{% elif user.agent %}{% url 'edit_account_agent' %}{% else %}{% url 'edit_account' %}{% endif %}">
 						<i class="bi bi-gear-fill fs-6"> </i>
 					</a>
 				</li>

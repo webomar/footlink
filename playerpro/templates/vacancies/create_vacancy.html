@@ -1,0 +1,66 @@
+{% extends 'theme/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<main>
+	<!-- Container START -->
+	<div class="container">
+		<div class="row g-4">
+            {% include 'theme/sidenav.html' %}
+			<!-- Main content START -->
+            <div class="col-md-8 col-lg-6 vstack gap-4">
+
+                  <!-- Card START -->
+                  <div class="card h-100">
+                    <!-- Card header START -->
+                    <div class="card-header d-sm-flex align-items-center text-center justify-content-sm-between border-0 pb-0">
+                      <h1 class="h4 card-title">Create vacancy</h1>
+                      <!-- Button modal -->
+                    </div>
+                    <!-- Card header START -->
+                <!-- Card body START -->
+                <div class="card-body">
+                    <!-- Form settings START -->
+  
+                    <form class="row g-3" method="POST" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div id="div_id_title" class="form-group">
+                        <label for="id_title" class="requiredField">
+                        Title 
+                        </label> 
+                        <input type="text" name="title" maxlength="255" class="textinput form-control" required="" id="id_title"  placeholder="title"> 
+                      </div>
+                      <div id="div_id_description" class="form-group">
+                        <label for="id_description" class="requiredField">
+                        Description 
+                        </label> 
+                        <input type="text" name="description" maxlength="255" class="textinput form-control" required="" id="id_description"  placeholder="description"> 
+                      </div>
+                      <div id="div_id_place" class="form-group">
+                        <label for="id_place" class="requiredField">
+                        place 
+                        </label> 
+                        <input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  placeholder="place"> 
+                      </div>
+
+                      <!-- Button  -->
+                      <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary mb-0">Create vacancy</button>
+                      </div>
+                     </form>
+  
+                    <!-- Settings END -->
+                  </div>
+                <!-- Card body END -->
+                </div>
+                <!-- Card END -->
+              </div>
+			<!-- Main content END -->
+		</div> <!-- Row END -->
+	</div>
+	<!-- Container END -->
+</main>
+
+{% endblock content %}

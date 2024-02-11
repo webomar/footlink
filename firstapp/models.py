@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -42,7 +43,6 @@ class User(AbstractUser):
         if not self.about:
             # depending on your template
             return 'Nothing to show here...'
-
         else:
         # Return the URL of the uploaded image
             return self.about
@@ -56,13 +56,12 @@ class User(AbstractUser):
             return self.profile_image.url
         
     def getCoverimageUrl(self):
-        if not self.profile_image:
+        if not self.cover_image:
             # depending on your template
             return '/static/cover_placeholder.jpg'
-
         else:
         # Return the URL of the uploaded image
-            return self.profile_image.url
+            return self.cover_image.url
         
     def connections(self):
         sent_connections = self.connection_requests_sent.filter(accepted=True)
@@ -205,6 +204,31 @@ class Scout(models.Model):
     
     def __str__(self):
         return self.user.email
+
+# Scout model
+class Agent(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='agent')
+
+    player_notes = models.TextField()
+    posts = models.ManyToManyField('Post', related_name='agent_posts')
+    
+    def __str__(self):
+        return self.user.email
+
+class Vacancy(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    place = models.CharField(max_length=255)
+    appliers = models.ManyToManyField(Player, related_name='applied_vacancies')
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='posted_vacancies')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+
+
+
 
 # Zaakwaarnemer model
 class Zaakwaarnemer(models.Model):

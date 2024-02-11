@@ -1,0 +1,167 @@
+{% extends 'theme/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<main>
+	<!-- Container START -->
+	<div class="container">
+		<div class="row g-4">
+            {% include 'theme/sidenav.html' %}
+      <!-- Main content START -->
+      <div class="col-md-8 col-lg-9 vstack gap-4">
+        <!-- Card START -->
+        <div class="card card-body card-overlay-bottom border-0" style="background-image:url({% static 'images/vacancy.jpg' %}); background-position: center; background-size: cover; background-repeat: no-repeat;">
+          <!-- Card body START -->
+          <div class="row g-3 justify-content-between">
+            <!-- Date START -->
+            {% comment %} <div class="col-lg-2">
+              <div class="bg-mode text-center rounded overflow-hidden p-1 d-inline-block">
+                <div class="bg-primary p-2 text-white rounded-top small lh-1">Wednesday</div>
+                <h5 class="mb-0 py-2 lh-1">Dec 08</h5>  
+              </div>
+            </div> {% endcomment %}
+          </div>
+          <!-- Event name START -->
+          <div class="row g-3 justify-content-between align-items-center mt-5 pt-5 position-relative z-index-9">
+            <div class="col-lg-9">
+              <h1 class="h3 mb-1 text-white">{{vacancy.title}}</h1>
+              {% comment %} <a class="text-white" href="https://themes.getbootstrap.com/store/webestica" target="_blank">https://themes.getbootstrap.com/store/webestica</a> {% endcomment %}
+            </div>
+            <!-- Button -->
+            {% if request.user.player %}
+            <div class="col-lg-3 text-lg-end">
+              {% comment %} <a class="btn btn-primary" href="#!"> Sign up </a> {% endcomment %}
+              {% if request.user.player in vacancy.appliers.all %}
+              <form method="post" action="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">Delete Application</button>
+              </form>
+              {% else %}
+              <form method="post" action="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary" type="submit">Apply</button>
+              </form>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+          <!-- Event name END -->
+        </div>
+        <!-- Card END -->
+        
+        <!-- Card About START -->
+        <div class="card card-body">  
+          <!-- Card body START -->
+          <div class="row g-4">
+            <!-- info -->
+            <div class="col-12">
+              <h5>Description</h5>
+              <p class="mb-0">{{vacancy.description}}</p>
+            </div>
+            <div class="col-12">
+              <h5>Placed by:</h5>
+              <p><a style="color: inherit" href="{% url 'profile' username=vacancy.agent.user.username %}"><strong>{{vacancy.agent.user.get_full_name}}</strong></a></p>
+            </div>
+          </div>
+          <hr class="mt-4">
+
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <!-- Avatar group END -->
+              <div class="row g-2">
+                <div class="col-sm-4">
+                  <!-- Registred -->
+                  <div class="d-flex">
+                    <i class="bi bi-eye-fill fs-4"></i>
+                    <div class="ms-3">
+                      <h5 class="mb-0">1456</h5>
+                      <p class="mb-0">Viewers</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <!-- Attendance -->
+                  <div class="d-flex">
+                    <i class="bi bi-people fs-4"></i>
+                    <div class="ms-3">
+                      <h5 class="mb-0">{{vacancy.appliers.count}}</h5>
+                      <p class="mb-0">Appliers</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Card About END -->
+
+        <!-- Related events START -->
+        <div class="row g-4">
+          <div class="col-lg-6">
+             <!-- Card START -->
+             <div class="card">
+              <div class="card-header border-0">
+                <h5 class="card-title">Related vacancies</h5>
+                <!-- Button modal -->
+              </div>
+              <!-- Card body START -->
+              <div class="card-body pt-0">
+                {% for vacancy in related_vacancies %}
+                                <!-- Related events item -->
+                                <div class="d-sm-flex flex-wrap align-items-center mb-3"> 
+                                  <!-- Avatar -->
+                                  <div class="avatar avatar-md">
+                                    <img class="avatar-img rounded-circle border border-white border-3" src="{% static 'images/vacancy.jpg' %}" alt="">
+                                  </div>
+                                  <!-- info -->
+                                  <div class="ms-sm-2 my-2 my-sm-0">
+                                    <h6 class="mb-0"><a href="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">{{vacancy.title}}</h6></a>
+                                    <p class="small mb-0"> <i class="bi bi-geo-alt pe-1"></i>{{vacancy.place}} </p>
+                                  </div>
+                                  <!-- Button -->
+                                  <div class="ms-sm-auto mt-2 mt-sm-0">
+                                    <!-- Interested button -->
+                                    <a href="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">
+                                    <label class="btn btn-sm btn-outline-success" for="Interested4">Meer <i class="fa-solid fa-ellipsis me-1"></i></label>
+                                    </a>
+                                  </div>
+                                </div>
+                {% endfor %}
+
+              </div>
+              <!-- Card body END -->
+            </div>
+            <!-- Card END -->
+          </div>
+
+
+          <div class="col-lg-6">
+            <!-- Card START -->
+            <div class="card">
+              <div class="card-header border-0 pb-0">
+                <h5 class="card-title mb-0">Vacancy location</h5>
+                <p class="small"> <i class="bi bi-geo-alt pe-1"></i>Johan Cruijff Boulevard 1, 1101 AX Amsterdam </p>
+                <!-- Button modal -->
+              </div>
+              <!-- Card body START -->
+              <div class="card-body pt-0">
+                <!-- Google map -->
+                <iframe class="w-100 d-block rounded-bottom grayscale" height="230" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=+(Ajax%20arena)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"  style="border:0;" aria-hidden="false" tabindex="0"></iframe>
+              </div>
+              <!-- Card body END -->
+            </div>
+            <!-- Card END -->
+          </div>
+        </div>
+        <!-- Related events END -->
+      </div>
+      <!-- Main content END -->
+		</div> <!-- Row END -->
+	</div>
+	<!-- Container END -->
+</main>
+
+{% endblock content %}

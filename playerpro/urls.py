@@ -32,8 +32,8 @@ urlpatterns = [
     path('players-list/', views.player_list, name='player_list'),
     path('players/<int:player_pk>/', views.player_detail, name='player_detail'),
 
-    path("signup/coach/", views.CoachSignUpView.as_view(), name="coach-signup"),
-    path("signup/scout/", views.ScoutSignUpView.as_view(), name="scout-signup"),
+    # path("signup/coach/", views.CoachSignUpView.as_view(), name="coach-signup"),
+    # path("signup/scout/", views.ScoutSignUpView.as_view(), name="scout-signup"),
 
     # path("player/", views.player_home, name="player-home"),
     # path("update/", views.player_profile, name="player-profile"),
@@ -42,17 +42,29 @@ urlpatterns = [
     path('', landing, name='landing'),
     path('feed/', feed, name='feed'),
     path("edit-account/", views.edit_account, name="edit_account"),
+    path("edit-account/scout/", views.edit_account_scout, name="edit_account_scout"),
+    path("edit-account/agent/", views.edit_account_agent, name="edit_account_agent"),
     path("profile/<str:username>", views.profile, name="profile"),
     
     path("profile_experience/<str:username>", views.profile_experience, name="profile_experience"),
+    path("scout_profile_experience/<str:username>", views.scout_profile_experience, name="scout_profile_experience"),
+    path("agent_profile_experience/<str:username>", views.agent_profile_experience, name="agent_profile_experience"),
+    
     path("profile_connections/<str:username>", views.profile_connections, name="profile_connections"),
+    path("scout_profile_connections/<str:username>", views.scout_profile_connections, name="scout_profile_connections"),
+    path("agent_profile_connections/<str:username>", views.agent_profile_connections, name="agent_profile_connections"),
+    
     path("profile_statistics/<str:username>", views.profile_statistics, name="profile_statistics"),
     path("profile_media/<str:username>", views.profile_media, name="profile_media"),
+    path("scout_profile_media/<str:username>", views.scout_profile_media, name="scout_profile_media"),
+    path("agent_profile_media/<str:username>", views.agent_profile_media, name="agent_profile_media"),
     
     
     
     path("login/", views.LoginView.as_view(), name="login"),
     path("signup/player/", views.PlayerSignUpView.as_view(), name="player-signup"),
+    path("signup/scout/", views.ScoutSignUpView.as_view(), name="scout-signup"),
+    path("signup/agent/", views.AgentSignUpView.as_view(), name="agent-signup"),
     path('logout/', views.logout_view, name="logout"),
     path('discover/', views.discover, name="discover"),
 
@@ -81,6 +93,10 @@ urlpatterns = [
 
     path('chat/<str:user_username>/', views.chat, name='chat'),
     path('chat2/<str:user_username>/', views.chat2, name='chat2'),
+
+    path('vacancies/', views.vacancies, name='vacancies'),
+    path('create_vacancy/', views.create_vacancy, name='create_vacancy'),
+    path('vacancies/<int:vacancy_id>/', views.vacancy_detail, name='vacancy_detail'),
 
 ]
 
