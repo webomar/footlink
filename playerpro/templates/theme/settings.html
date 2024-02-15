@@ -9,83 +9,10 @@
     <div class="row">
 
       <!-- Sidenav START -->
-      <div class="col-lg-3">
 
-        <!-- Advanced filter responsive toggler START -->
-				<!-- Divider -->
-				<div class="d-flex align-items-center mb-4 d-lg-none">
-					<button class="border-0 bg-transparent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-						<span class="btn btn-primary"><i class="fa-solid fa-sliders-h"></i></span>
-            <span class="h6 mb-0 fw-bold d-lg-none ms-2">Settings</span>
-					</button>
-				</div>
-				<!-- Advanced filter responsive toggler END -->
 
-        <nav class="navbar navbar-light navbar-expand-lg mx-0">
-          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
-            <!-- Offcanvas header -->
-						<div class="offcanvas-header">
-							<button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-						</div>
+        {% include 'theme/sidenav.html' %}
 
-            <!-- Offcanvas body -->
-            <div class="offcanvas-body p-0">
-              <!-- Card START -->
-              <div class="card w-100">
-                <!-- Card body START -->
-                <div class="card-body">
-
-                <!-- Side Nav START -->
-                <ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0">
-                  <li class="nav-item" data-bs-dismiss="offcanvas">
-                    <a class="nav-link d-flex mb-0 active" href="#nav-setting-tab-1" data-bs-toggle="tab">
-                      <img class="me-2 h-20px fa-fw" src="{% static 'assets/images/icon/person-outline-filled.svg' %}" alt="">
-                      <span>Account</span>
-                    </a>
-                  </li>
-
-                </ul>
-                <!-- Side Nav END -->
-
-              </div>
-              <!-- Card body END -->
-              <!-- Card footer -->
-              <div class="card-footer text-center py-2">
-                <a class="btn btn-link text-secondary btn-sm" href="{% url 'profile' username=request.user.username %}">View Profile </a>
-              </div>
-              </div>
-            <!-- Card END -->
-            </div>
-            <!-- Offcanvas body -->
-
-            <!-- Helper link START -->
-            <ul class="nav small mt-4 justify-content-center lh-1">
-              <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Settings</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Support </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Docs </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Help</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Privacy & terms</a>
-              </li>
-            </ul>
-            <!-- Helper link END -->
-            <!-- Copyright -->
-            <p class="small text-center mt-1">©2023 <a class="text-body" target="_blank" href="https://www.webestica.com/"> Webestica </a></p>
-          
-          </div>
-        </nav>
-      </div>
       <!-- Sidenav END -->
 
         <!-- Main content START -->
@@ -100,8 +27,8 @@
                 
                 <!-- Title START -->
                 <div class="card-header border-0 pb-0">
-                  <h1 class="h5 card-title">Account Settings</h1>
-                  <p class="mb-0">Add personal information:</p>
+                  <h1 class="h5 card-title">Account instellingen</h1>
+                  <p class="mb-0">Voeg informatie toe:</p>
                 </div>
                 <!-- Card header START -->
                 <!-- Card body START -->
@@ -183,14 +110,14 @@
                     <div id="div_id_first_name" class="form-group col-sm-6 col-lg-6">
                       <div> 
                         <label for="id_first_name" class="requiredField">
-                        First name 
+                        Voornaam 
                         </label> 
                         <input type="text" name="first_name" maxlength="255" class="textinput form-control" required="" id="id_first_name"  placeholder="{{request.user.first_name}}" {% if request.user.first_name != None %} value="{{request.user.first_name}}" {% endif %}> 
                        </div>
                     </div>
                     <div id="div_id_last_name" class="form-group col-sm-6 col-lg-6">
                        <label for="id_last_name" class=" requiredField">
-                       Last name </label> 
+                       Achternaam </label> 
                        <div> 
                         <input type="text" name="last_name" maxlength="255" class="textinput form-control" required="" id="id_last_name"  placeholder="{{request.user.last_name}}" {% if request.user.last_name != None %} value="{{request.user.last_name}}" {% endif %}> 
                       </div>
@@ -202,7 +129,7 @@
                     </div>
                     <div id="div_id_phone_number" class="form-group col-sm-6 col-lg-6">
                       <label for="id_phone_number" class=" requiredField">
-                      Phone number </label> 
+                      Mobiel </label> 
                       <div> <input type="text" name="phone_number" maxlength="255" class="textinput form-control" required="" id="id_phone_number"  placeholder="{{request.user.phone_number}}" {% if request.user.phone_number != None %} value="{{request.user.phone_number}}" {% endif %}> </div>
                    </div>
                     {% comment %} <div id="div_id_profile_image" class="form-group">
@@ -213,13 +140,13 @@
                     </div> {% endcomment %}
                     <div id="div_id_place" class="form-group col-sm-6 col-lg-6">
                        <label for="id_place" class=" requiredField">
-                       Place </label> 
+                       Plaats </label> 
                        <div> <input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  placeholder="{{request.user.place}}" {% if request.user.place != None %} value="{{request.user.place}}" {% endif %}> </div>
                     </div>
 
                     <div id="div_id_date_of_birth" class="form-group col-sm-6 col-lg-6">
                        <label for="id_date_of_birth" class=" requiredField">
-                       Date of birth </label> 
+                       Geboortedatum </label> 
                        <div> <input type="date" name="date_of_birth" class="dateinput form-control" required="" id="id_date_of_birth" placeholder="{{request.user.date_of_birth|date:'Y-m-d'}}" {% if request.user.date_of_birth != None %} value="{{request.user.date_of_birth|date:'Y-m-d'}}" {% endif %}> </div>
                     </div>
 
@@ -230,36 +157,36 @@
                     </div>
                     <div id="div_id_competition" class="form-group col-sm-6 col-lg-6">
                        <label for="id_competition" class=" requiredField">
-                       Competition </label> 
+                       Competitie </label> 
                        <div> <input type="text" name="competition" placeholder="{{request.user.player.competition}}" maxlength="255" class="textinput form-control" required="" id="id_competition" {% if request.user.player.competition != None %} value="{{request.user.player.competition}}" {% endif %}> </div>
                     </div>
                     <div id="div_id_length" class="form-group col-sm-6 col-lg-6">
                        <label for="id_length" class=" requiredField">
-                       Length </label> 
+                       Lengte </label> 
                        <div> <input type="number" name="length" placeholder="{{request.user.player.length}}" class="numberinput form-control" required="" id="id_length"  {% if request.user.player.length != None %} value="{{request.user.player.length}}" {% endif %}> </div>
                     </div>
                     <div id="div_id_weight" class="form-group col-sm-6 col-lg-6">
                        <label for="id_weight" class=" requiredField">
-                       Weight </label> 
+                       Gewicht </label> 
                        <div> <input type="number" name="weight" placeholder="{{request.user.player.weight}}" class="numberinput form-control" required="" id="id_weight"  {% if request.user.player.weight != None %} value="{{request.user.player.weight}}" {% endif %}> </div>
                     </div>
                     <div id="div_id_position" class="form-group col-sm-6 col-lg-6">
                        <label for="id_position" class=" requiredField">
-                       Position </label> 
+                       Positie </label> 
                        <div> <input type="text" name="position"  placeholder="{{request.user.player.position}}" maxlength="255" class="textinput form-control" required="" id="id_position" {% if request.user.player.position != None %} value="{{request.user.player.position}}" {% endif %}>  </div>
                     </div>
 
 
                     <div id="div_id_goals" class="form-group col-sm-6 col-lg-6">
                       <label for="id_goals" class=" requiredField">
-                      Number of goals </label> 
+                      Aantal doelpunten </label> 
                       <div> <input type="number" name="goals" placeholder="{{request.user.player.goals}}" {% if request.user.player.goals != None %} value="{{request.user.player.goals}}" {% endif %} class="numberinput form-control" required="" id="id_goals"> </div>
                    </div>
 
 
                     <div id="div_id_profile_image" class="form-group"> 
                       <label for="id_profile_image" class="">
-                      Profile image
+                      Profielfoto
                       </label> 
                       <div> 
                         <input type="file" name="profile_image" accept="image/*" class="clearablefileinput form-control-file" id="id_profile_image"> 
@@ -268,7 +195,7 @@
 
                     <div id="div_id_cover_image" class="form-group"> 
                       <label for="id_cover_image" class="">
-                      Cover image
+                      Coverfoto
                       </label> 
                       <div> 
                         <input type="file" name="cover_image" accept="image/*" class="clearablefileinput form-control-file" id="id_cover_image"> 
@@ -279,7 +206,7 @@
 
                     <!-- Button  -->
                     <div class="col-12 text-end">
-                      <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
+                      <button type="submit" class="btn btn-sm btn-primary mb-0">Opslaan...</button>
                     </div>
                    </form>
 

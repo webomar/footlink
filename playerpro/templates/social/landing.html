@@ -1,8 +1,8 @@
-{%load static%}
+{%load static i18n%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Social - Network, Community and Event Theme</title>
+	<title>Social - Network, Community and More</title>
 
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
@@ -36,9 +36,9 @@
     <nav class="navbar navbar-expand-lg">
       <div class="container">
         <!-- Logo START -->
-        <a class="navbar-brand" href="#">
-          <img class="light-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo">
-          <img class="dark-mode-item navbar-brand-item" src="{% static 'assets/images/logo.svg' %}" alt="logo">		
+        <a class="navbar-brand" href="">
+          <img class="light-mode-item navbar-brand-item" src="{% static 'images/logo.png' %}" alt="logo">
+          {% comment %} <img class="dark-mode-item navbar-brand-item" src="{% static 'images/logo.png' %}" alt="logo">		 {% endcomment %}
         </a>
         
         <!-- Logo END -->
@@ -56,20 +56,20 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav navbar-nav-scroll me-auto">
             <!-- Nav item -->
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
               <a class="nav-link" href="#">Blog</a>
             </li>
             <!-- Nav item -->
             <li class="nav-item">
               <a class="nav-link" href="#">Security</a>
-            </li>
+            </li> {% endcomment %}
           </ul>
         </div>
         <!-- Main navbar END -->
 
         <!-- Nav right START -->
         <div class="ms-3 ms-lg-auto">
-          <a class="btn btn-dark" href="#"> Download app </a>
+          <a class="btn btn-dark" href=""> App Downloaden </a>
         </div>
           <!-- Nav right END -->
         </div>
@@ -91,28 +91,27 @@
     <div class="container">
       <!-- Row START -->
       <div class="row text-center position-relative z-index-1">
-        <div class="col-lg-7 mx-auto">
+        <div class="col-lg-7 mx-auto mb-4">
           <!-- Heading -->
-          <h1 class="display-3">The Best Social App</h1>
-          <p class="lead">See resolved goodness felicity shy civility domestic had but perceive laughing six did far. </p>
-          <h3 class="mb-3">Sign up as:</h3>
+          <h1 class="display-2 mb-5">{% trans 'De Beste Plek voor Sporters' %}</h1>{% trans '' %}
+          <h3 class="mb-3">{% trans 'Inschrijven als:' %}</h3>
           
           <div class="d-sm-flex justify-content-center">
             <!-- button -->
-            <a href="{% url 'player-signup' %}"><button class="btn btn-primary mx-2">Player</button></a>
-            <a href="{% url 'agent-signup' %}"><button class="btn btn-primary mx-2">Agent</button></a>
-            <a href="{% url 'scout-signup' %}"><button class="btn btn-primary mx-2">Scout</button></a>
+            <a href="{% url 'player-signup' %}"><button class="btn btn-primary mx-2">{% trans 'Speler' %}</button></a>
+            <a href="{% url 'agent-signup' %}"><button class="btn btn-primary mx-2">{% trans 'Zaakwaarnemer' %}</button></a>
+            <a href="{% url 'scout-signup' %}"><button class="btn btn-primary mx-2">{% trans 'Scout' %}</button></a>
             <div class="mt-2 mt-sm-0 ms-sm-3">
-              <!-- Rating START -->
+              {% comment %} <!-- Rating START -->
               <div class="hstack justify-content-center justify-content-sm-start gap-1">
                 <div><i class="fa-solid fa-star text-warning"></i></div>
                 <div><i class="fa-solid fa-star text-warning"></i></div>
                 <div><i class="fa-solid fa-star text-warning"></i></div>
                 <div><i class="fa-solid fa-star text-warning"></i></div>
-                <div><i class="fa-solid fa-star-half-stroke text-warning"></i></div>
+                <div><i class="fa-solid fa-star text-warning"></i></div>
               </div>
               <!-- Rating END -->
-              <i>"I can't believe it's free!"</i>
+              <i>"I can't believe it's free!"</i> {% endcomment %}
             </div>
           </div>
         </div>
@@ -120,7 +119,7 @@
       <!-- Row END -->
 
       <!-- Row START -->
-      <div class="row g-0 align-items-center mt-2 position-relative z-index-1">
+      <div class="row g-0 align-items-center mt-4 position-relative z-index-1">
         <div class="col-lg-4">
           <!-- iphone-x mockup START -->
           <div class="iphone-x iphone-x-small" style="background: url('{% static 'assets/images/mockup/app-placeholder2.jpg' %}'); background-size: 100%;">
@@ -176,8 +175,8 @@
       <div class="row justify-content-center">
         <!-- Title -->
         <div class="col-lg-12 text-center mb-4">
-          <h2 class="h1">More than messaging</h2>
-          <p>Express besides it present if at an opinion visitor. </p>
+          <h2 class="h1">{% trans 'Meer dan sociaal' %}</h2>
+          <p>{% trans 'Het is de plek die elke atleet nodig heeft' %} </p>
         </div>
       </div>
       <!-- Row START -->
@@ -185,24 +184,24 @@
       <!-- Feature START -->
       <div class="col-md-4 text-center">
         <img class="h-100px mb-4" src="{% static 'assets/images/elements/02.svg' %}" alt="">
-        <h4>Voice and video calls</h4>
-        <p class="mb-0">Place voice no arises along to. Parlors waiting so against me no. Wishing calling is warrant settled was lucky.</p>
+        <h4>{% trans 'Netwerkuitbreiding' %}</h4>
+        <p class="mb-0">{% trans 'Breid je sportnetwerk uit met ons platform dat atleten, coaches en scouts samenbrengt. Maak verbindingen die tellen en ontdek nieuwe kansen in de sportwereld met slechts een paar klikken.' %}</p>
       </div>
       <!-- Feature END -->
 
       <!-- Feature START -->
       <div class="col-md-4 text-center">
         <img class="h-100px mb-4" src="{% static 'assets/images/elements/07.svg' %}" alt="">
-        <h4>Auto save contacts</h4>
-        <p class="mb-0">Handsome met debating sir dwelling age material. As style lived he worse dried. visitors subjects distance.</p>
+        <h4>{% trans 'Talentontdekking' %}</h4>
+        <p class="mb-0">{% trans 'Ontdek en volg opkomende talenten met onze geavanceerde zoek- en filtertools. Ons platform helpt je het potentieel van jonge atleten te herkennen en biedt de mogelijkheid om hun groei te volgen en te ondersteunen.' %}</p>
       </div>
       <!-- Feature END -->
 
       <!-- Feature START -->
       <div class="col-md-4 text-center">
         <img class="h-100px mb-4" src="{% static 'assets/images/elements/01.svg' %}" alt="">
-        <h4>End to end encryption</h4>
-        <p class="mb-0">Yet uncommonly his ten who diminution astonished. Demesne new manners savings staying had. </p>
+        <h4>{% trans 'Carrièreontwikkeling' %}</h4>
+        <p class="mb-0">{% trans 'Versterk je sportcarrière door toegang te krijgen tot een breed scala aan bronnen en tools voor persoonlijke ontwikkeling. Van het vinden van de juiste training tot het landen van je volgende grote kans, NetMasters is er om je te begeleiden.' %}</p>
       </div>
       <!-- Feature END -->
 
@@ -211,7 +210,7 @@
     </div>
   </section>
   <!-- Messaging feature END -->
-
+{% comment %} 
   <!-- features START -->
   <section class="py-4 py-sm-5">
     <div class="container">
@@ -255,7 +254,7 @@
             </div>
             <!-- Info -->
             <h4 class="mt-4">Safer communities</h4>
-            <p class="mb-0">Departure defective arranging rapturous did believe him all had supported simple set nature.</p>
+            <p class="mb-0">Bij NetMasters staat de veiligheid van onze leden voorop. Wij zorgen voor een betrouwbare omgeving waar atleten en professionals veilig kunnen netwerken en samenwerken.</p>
           </div>
         </div>
         <!-- Feature item START -->
@@ -268,7 +267,7 @@
             </div>
             <!-- Info -->
             <h4 class="mt-4">Genuine users</h4>
-            <p class="mb-0">Satisfied conveying a dependent contented he gentleman agreeable do be warrant removed.</p>
+            <p class="mb-0">Ons platform garandeert authentieke gebruikers door middel van een grondige verificatieproces. Dit zorgt ervoor dat je connecties maakt met echte, geverifieerde sporttalenten en -experts.</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -279,7 +278,7 @@
             </div>
             <!-- Info -->
             <h4 class="mt-4">Stronger communities</h4>
-            <p class="mb-0">Meant balls it if up doubt small purse. Required his you put the outlived answered position.</p>
+            <p class="mb-0">Bouw aan een sterkere sportgemeenschap met NetMasters. Onze tools ondersteunen samenwerking en het delen van kennis, waardoor je banden met teamgenoten en vakgenoten kunt versterken.</p>
           </div>
         </div>
       </div>
@@ -448,12 +447,12 @@
       </div>
     </div>
   </section>
-  <!-- Action box END -->
+  <!-- Action box END --> {% endcomment %}
 
   <!-- Main content END -->
 </main>
 <!-- **************** MAIN CONTENT END **************** -->
-
+{% comment %} 
 <!-- Footer START -->
 <footer class="pt-5 bg-mode">
   <div class="container">
@@ -528,8 +527,10 @@
     </div>
   </div>
 </footer>
-<!-- Footer END -->
+<!-- Footer END --> {% endcomment %}
 
+
+{% comment %} 
  <!-- QR-code START -->
  <div class="position-fixed bottom-0 end-0 m-5 text-center d-none d-xxl-block">
   <h6 class="mt-3">Scan here <br> to download</h6>
@@ -542,7 +543,7 @@
   <div class="mt-3"> 
     <img class="w-100px" src="{% static 'assets/images/qr-code.png' %}" alt="">
   </div>
-</div>
+</div> {% endcomment %}
 
 <!-- =======================
 JS libraries, plugins and custom scripts -->

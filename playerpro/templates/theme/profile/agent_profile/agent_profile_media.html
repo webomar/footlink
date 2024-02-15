@@ -19,8 +19,8 @@
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
                 <li class="nav-item"> <a class="nav-link" href="{% url 'profile' username=user.username %}"> Posts </a> </li>
-                <li class="nav-item"> <a class="nav-link" href="{% url 'agent_profile_experience' username=user.username %}"> Experience</a> </li>
-                <li class="nav-item"> <a class="nav-link" href="{% url 'agent_profile_connections' username=user.username %}"> Connections <span class="badge bg-success bg-opacity-10 text-success small"> {{num_connections}}</span> </a> </li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'agent_profile_experience' username=user.username %}"> Ervaring</a> </li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'agent_profile_connections' username=user.username %}"> Connecties <span class="badge bg-success bg-opacity-10 text-success small"> {{num_connections}}</span> </a> </li>
                 <li class="nav-item"> <a class="nav-link active" href="{% url 'agent_profile_media' username=user.username %}"> Media</a> </li>
               </ul>
             </div>
