@@ -30,24 +30,8 @@
               {% comment %} <a class="text-white" href="https://themes.getbootstrap.com/store/webestica" target="_blank">https://themes.getbootstrap.com/store/webestica</a> {% endcomment %}
             </div>
             <!-- Button -->
-            {% if request.user.player %}
-            <div class="col-lg-3 text-lg-end">
-              {% comment %} <a class="btn btn-primary" href="#!"> Sign up </a> {% endcomment %}
-              {% if request.user.player in vacancy.appliers.all %}
-              <form method="post" action="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Delete Application</button>
-              </form>
-              {% else %}
-              <form method="post" action="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button class="btn btn-primary" type="submit">Apply</button>
-              </form>
-              {% endif %}
-            </div>
-            {% endif %}
-          </div>
+
+                  </div>
           <!-- Event name END -->
         </div>
         <!-- Card END -->
@@ -157,6 +141,125 @@
           </div>
         </div>
         <!-- Related events END -->
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Application START -->
+        <div class="row g-4">
+
+        {% if user.is_authenticated and user.agent == vacancy.agent and user.agent == vacancy.agent %}
+
+
+
+
+
+        <div class="col-lg-6">
+          <div class="row g-4">
+            <!-- Card follow START -->
+            <div class="col-sm-6 col-lg-12">
+              <div class="card">
+                <!-- Card header START -->
+                <div class="card-header pb-0 border-0">
+                  <h5 class="card-title mb-0">appliers</h5>
+                </div>
+                <!-- Card header END -->
+                <!-- Card body START -->
+                <div class="card-body">
+
+        {% if vacancy.applications.count > 0 %}
+        <ul>
+          {% for application in vacancy.applications.all %}
+            {% comment %} <li>{{ applier.user.username }} - {{ applier.motivation }}</li> {% endcomment %}
+              <!-- Connection item START -->
+              <div class="hstack gap-2 mb-3">
+                <!-- Avatar -->
+                <div class="avatar">
+                  <a href="{% url 'profile' username=application.player.user.username %}"><img class="avatar-img rounded-circle" src="{{ application.player.user.getProfileimageUrl }}" alt=""></a>
+                </div>
+                <!-- Title -->
+                <div class="overflow-hidden">
+                  <a class="h6 mb-0" href="{% url 'profile' username=application.player.user.username %}">{{application.player.user.getFullName}} </a>
+                  <p class="mb-0 small text-truncate">{{application.player.position}} at {{application.player.club}}</p>
+                  <p>{{ application.motivation }}</p>
+                </div>
+                <!-- Button -->
+                {% comment %} <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="#"><i class="fa-solid fa-plus"> </i></a> {% endcomment %}
+              </div>
+              <!-- Connection item END -->
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No applications yet.</p>
+      {% endif %}
+
+                </div>
+                <!-- Card body END -->
+              </div>
+            </div>
+            <!-- Card follow START -->
+          </div>
+        </div>
+
+
+
+      {% else %}
+
+      <div class="col-lg-6">
+        <!-- Card START -->
+        <div class="card">
+         <div class="card-header border-0">
+           <h5 class="card-title">Apply</h5>
+           <!-- Button modal -->
+         </div>
+         <!-- Card body START -->
+         <div class="card-body pt-0">
+
+
+           {% if request.user.player in vacancy.appliers.all %}
+           {% comment %} <form method="post" action="{% url 'delete_application' vacancy_id=vacancy.id %}">
+             {% csrf_token %}
+             <button type="submit">Delete Application</button>
+           </form> {% endcomment %}
+           Already Applied
+         {% else %}
+           <form method="post" action="{% url 'vacancy_detail' vacancy_id=vacancy.id %}">
+             {% csrf_token %}
+             {{ form }}
+             <button class="btn btn-primary"type="submit">Apply</button>
+           </form>
+         {% endif %}
+
+         </div>
+         <!-- Card body END -->
+       </div>
+       <!-- Card END -->
+     </div>
+
+      {% endif %}
+    
+
+
+
+
+
+        </div>
+        <!-- Application END -->
+
+
+
+
+
+
+
       </div>
       <!-- Main content END -->
 		</div> <!-- Row END -->

@@ -1,7 +1,7 @@
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import transaction
-from .models import Agent, Like, Post, User, Coach, Player, Scout, Zaakwaarnemer, Media
+from .models import Agent, Application, Like, Post, User, Coach, Player, Scout, Zaakwaarnemer, Media
 from django import forms
 from django.contrib.auth import get_user_model
 
@@ -122,74 +122,11 @@ class PlayerUpdateForm(UserChangeForm, forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Add any additional customization to form fields if needed
 
-class UserPlayerUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Player
-        exclude = ['user', 'followed_players', 'media_collection', 'posts']
-    
-    email = forms.EmailField()
-    first_name = forms.CharField(max_length=255)
-    last_name = forms.CharField(max_length=255)
-    club = forms.CharField(max_length=255, required=False)
-    nft = forms.CharField(max_length=255, required=False)
-    competition = forms.CharField(max_length=255, required=False)
-    length = forms.IntegerField(required=False)
-    weight = forms.IntegerField(required=False)
-    preferred_leg = forms.CharField(max_length=10, required=False)
-    position = forms.CharField(max_length=255, required=False)
-    qualities = forms.CharField(max_length=255, required=False)
-    career_statistics = forms.CharField(max_length=255, required=False)
-    ambition = forms.CharField(widget=forms.Textarea, required=False)
-    phone_number = forms.CharField(max_length=20, required=False)
-    profile_image = forms.ImageField()
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields['email'].initial = self.instance.user.email
-        self.fields['first_name'].initial = self.instance.user.first_name
-        self.fields['last_name'].initial = self.instance.user.last_name
-
-        self.fields['club'].initial = self.instance.club
-        self.fields['nft'].initial = self.instance.nft
-        self.fields['competition'].initial = self.instance.competition
-        self.fields['length'].initial = self.instance.length
-        self.fields['weight'].initial = self.instance.weight
-        self.fields['preferred_leg'].initial = self.instance.preferred_leg
-        self.fields['position'].initial = self.instance.position
-        self.fields['qualities'].initial = self.instance.qualities
-        self.fields['career_statistics'].initial = self.instance.career_statistics
-        self.fields['ambition'].initial = self.instance.ambition
-        self.fields['phone_number'].initial = self.instance.phone_number
-
-    # def save(self, commit=True):
-    #     player = super().save(commit=commit)
-    #     user = player.user
-    #     user.email = self.cleaned_data['email']
-    #     user.first_name = self.cleaned_data['first_name']
-    #     user.last_name = self.cleaned_data['last_name']
-    #     user.profile_image = self.cleaned_data['profile_image']
-    #     print('aksjhdflkajsh;dfjkas;hdlkfh;aslkdf')
-    #     print(self.cleaned_data['profile_image'])
-    #     print(user.profile_image)
-    #     user.save()
-    #     return user
-    
-    def save(self, commit=True):
-        player = super().save(commit=False)  # Save the player instance but don't commit yet
-        user = player.user
-        user.email = self.cleaned_data['email']
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-        user.profile_image = self.cleaned_data['profile_image']
-        if commit:
-            player.save()  # Save the player instance
-            user.save()  # Save the user instance
-        return player  # Return the player object
-
 
 
 from django.forms import DateInput
 
+# Allbwani
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
@@ -230,7 +167,7 @@ class EditUserForm69(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['date_of_birth'].widget = DateInput(attrs={'type': 'date'})
 
-
+# Allbwani
 class PlayerProfileForm(forms.ModelForm):
     class Meta:
         model = Player
@@ -345,5 +282,11 @@ class VacancyForm(forms.ModelForm):
 from django import forms
 from .models import Vacancy, Player
 
-class ApplicationForm(forms.Form):
-    player = forms.ModelChoiceField(queryset=Player.objects.all(), empty_label=None, label='Select a Player')
+
+
+from django import forms
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['motivation']

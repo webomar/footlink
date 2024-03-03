@@ -50,23 +50,7 @@
 
 		  <form action="{% url 'agent-signup' %}" method="POST">
 			{% csrf_token %}
-			<div id="div_id_username" class="form-group mb-3 input-group-lg">
-				<input type="text" name="username" placeholder="Username" autofocus="" class="textinput form-control" required="" id="id_username">
-				<small>We'll never share your email with anyone else.</small>
-			</div>
-			 <div id="div_id_email" class="form-group mb-3 input-group-lg">
-				<input type="email" name="email" placeholder="Email" maxlength="320" class="emailinput form-control" required="" id="id_email">
-			 </div>
-			 <div id="div_id_password1" class="form-group mb-3 input-group-lg">
-				<input type="password" name="password1" placeholder="Password" class="passwordinput form-control" required="" id="id_password1">
-			 </div>
-			 <div id="div_id_password2" class="form-group mb-3 input-group-lg">
-				<input type="password" name="password2" placeholder="Confirm password" label="popo" class="passwordinput form-control" required="" id="id_password2">
-			 </div>
-
-			 <div class="d-grid"><button type="submit" class="btn btn-lg btn-primary">Sign me up</button></div>
-       {{form.errors}}
-
+			{% include 'accounts/base_signup_form.html' %}
 		  </form>
 
 

@@ -169,6 +169,7 @@ class Player(models.Model):
 
     # Add additional fields specific to each user type
     club = models.CharField(max_length=255, null=True, blank=True)
+    team = models.CharField(max_length=255, null=True, blank=True)
     nft = models.CharField(max_length=255, null=True, blank=True) # national football team
     competition = models.CharField(max_length=255, null=True, blank=True)
     length = models.IntegerField(null=True, blank=True)
@@ -219,7 +220,6 @@ class Vacancy(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     place = models.CharField(max_length=255)
-    appliers = models.ManyToManyField(Player, related_name='applied_vacancies')
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='posted_vacancies')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -227,6 +227,13 @@ class Vacancy(models.Model):
         return self.title
     
 
+class Application(models.Model):
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name='applications')
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    motivation = models.TextField()
+
+    def __str__(self):
+        return f"{self.player.username} - {self.vacancy.title}"
 
 
 

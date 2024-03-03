@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import views as auth_views
 from .decorators import coach_required, player_required, scout_required
 
-from .forms import AgentProfileForm, AgentSignUpForm, PlayerAssistForm, PlayerCleanSheetForm, PlayerGoalForm, PlayerPlayedMatchesForm, PlayerSignUpForm, CoachSignUpForm, LoginForm, PlayerStatsForm, ScoutSignUpForm, UserPlayerUpdateForm, EditProfileForm, PlayerProfileForm, ScoutProfileForm, CoachProfileForm, VacancyForm
+from .forms import AgentProfileForm, AgentSignUpForm, PlayerAssistForm, PlayerCleanSheetForm, PlayerGoalForm, PlayerPlayedMatchesForm, PlayerSignUpForm, CoachSignUpForm, LoginForm, PlayerStatsForm, ScoutSignUpForm, EditProfileForm, PlayerProfileForm, ScoutProfileForm, CoachProfileForm, VacancyForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView
 
@@ -22,7 +22,7 @@ from django.contrib.auth import login
 #         form = PlayerRegistrationForm()
 #     return render(request, 'registration/player_registration.html', {'form': form})
 
-from .models import Experience, Player, Post, Vacancy
+from .models import Application, Experience, Player, Post, Vacancy
 
 def home(request):
     return render(request, 'home.html')
@@ -312,19 +312,19 @@ def update_user(request):
         form = PlayerUpdateForm(instance=request.user)
     return render(request, 'update_user.html', {'form': form})
 
+# noallbwani
+# @login_required
+# def player_profile(request):
+#     player = request.user.player  # Assuming the player instance is associated with the user
+#     if request.method == 'POST':
+#         form = UserPlayerUpdateForm(request.POST, request.FILES, instance=player)
+#         if form.is_valid():
+#             form.save()
+#             # Redirect or do something else
+#     else:
+#         form = UserPlayerUpdateForm(instance=player)  # Pass the player instance to the form
 
-@login_required
-def player_profile(request):
-    player = request.user.player  # Assuming the player instance is associated with the user
-    if request.method == 'POST':
-        form = UserPlayerUpdateForm(request.POST, request.FILES, instance=player)
-        if form.is_valid():
-            form.save()
-            # Redirect or do something else
-    else:
-        form = UserPlayerUpdateForm(instance=player)  # Pass the player instance to the form
-
-    return render(request, 'update_user.html', {'form': form, 'player': player})
+#     return render(request, 'update_user.html', {'form': form, 'player': player})
 
 
 
@@ -1278,21 +1278,21 @@ from .forms import ApplicationForm
 def vacancy_detail(request, vacancy_id):
     vacancy = Vacancy.objects.get(id=vacancy_id)
     related_vacancies = Vacancy.objects.all().exclude(id=vacancy.id)[:3]
-
+    applications = vacancy.applications.all()
 
     if request.method == 'POST':
         player = request.user.player
 
-        if player in vacancy.appliers.all():
-            vacancy.appliers.remove(player)
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            motivation = form.cleaned_data['motivation']
+            Application.objects.create(vacancy=vacancy, player=player, motivation=motivation)
             vacancy.save()
-        else:
-            vacancy.appliers.add(player)
-            vacancy.save()
+
     else:
         form = ApplicationForm()
 
-    return render(request, 'vacancies/vacancy_detail.html', {'vacancy': vacancy, 'related_vacancies':related_vacancies})
+    return render(request, 'vacancies/vacancy_detail.html', {'vacancy': vacancy, 'related_vacancies':related_vacancies, 'form':form, 'applications': applications})
 
 
 

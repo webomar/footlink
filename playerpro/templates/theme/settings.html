@@ -151,10 +151,22 @@
                     </div>
 
                     <div id="div_id_club" class="form-group col-sm-6 col-lg-6">
-                       <label for="id_club" class=" requiredField">
-                       Club </label> 
-                       <div> <input type="text" name="club" placeholder="{{request.user.player.club}}" maxlength="255" class="textinput form-control" required="" id="id_club" {% if request.user.player.club != None %} value="{{request.user.player.club}}" {% endif %}> </div>
-                    </div>
+                      <label for="id_club" class=" requiredField">
+                      Club </label> 
+                      <div> 
+                        <small>Example: PSV</small>
+                        <input type="text" name="club" placeholder="{{request.user.player.club}}" maxlength="255" class="textinput form-control" required="" id="id_club" {% if request.user.player.club != None %} value="{{request.user.player.club}}" {% endif %}> 
+                      </div>
+                   </div>
+                   
+                   <div id="div_id_team" class="form-group col-sm-6 col-lg-6">
+                    <label for="id_team" class=" requiredField">
+                    Team </label> 
+                    <div> 
+                      <small>Example: J/M019</small>
+                      <input type="text" name="team" placeholder="{{request.user.player.team}}" maxlength="255" class="textinput form-control" required="" id="id_team" {% if request.user.player.team != None %} value="{{request.user.player.team}}" {% endif %}> </div>
+                  </div>
+                 
                     <div id="div_id_competition" class="form-group col-sm-6 col-lg-6">
                        <label for="id_competition" class=" requiredField">
                        Competitie </label> 

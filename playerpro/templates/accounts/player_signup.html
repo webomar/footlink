@@ -52,31 +52,33 @@
 		  <form action="{% url 'player-signup' %}" method="POST">
 			{% csrf_token %}
 			<div id="div_id_username" class="form-group mb-3 input-group-lg">
-				<input type="text" name="username" placeholder="Gebruikersnaam" autofocus="" class="textinput form-control" required="" id="id_username">
+				{% for error in form.username.errors %}
+				<div class="text-danger" role="alert">{{ error }}</div>
+			  {% endfor %}
+				<input type="text" name="username" placeholder="Gebruikersnaam" autofocus="" class="textinput form-control" required="" id="id_username" value="{{form.username.value|default_if_none:''}}">
 				<small>We zullen je e-mailadres nooit met iemand anders delen.</small>
 			</div>
 			 <div id="div_id_email" class="form-group mb-3 input-group-lg">
-				<input type="email" name="email" placeholder="Email" maxlength="320" class="emailinput form-control" required="" id="id_email">
+				{% for error in form.email.errors %}
+				<div class="text-danger" role="alert">{{ error }}</div>
+			  {% endfor %}
+				<input type="email" name="email" placeholder="Email" maxlength="320" class="emailinput form-control" required="" id="id_email" value="{{form.email.value|default_if_none:''}}">
 			 </div>
 			 <div id="div_id_password1" class="form-group mb-3 input-group-lg">
-				<input type="password" name="password1" placeholder="Wachtwoord" class="passwordinput form-control" required="" id="id_password1">
+				{% for error in form.password1.errors %}
+				<div class="text-danger" role="alert">{{ error }}</div>
+			  {% endfor %}
+				<input type="password" name="password1" placeholder="Wachtwoord" class="passwordinput form-control" required="" id="id_password1" value="{{form.password1.value|default_if_none:''}}">
 			 </div>
 			 <div id="div_id_password2" class="form-group mb-3 input-group-lg">
-				<input type="password" name="password2" placeholder="Herhaal wachtwoord" label="popo" class="passwordinput form-control" required="" id="id_password2">
+				{% for error in form.password2.errors %}
+				<div class="text-danger" role="alert">{{ error }}</div>
+			  {% endfor %}
+				<input type="password" name="password2" placeholder="Herhaal wachtwoord" label="popo" class="passwordinput form-control" required="" id="id_password2" value="{{form.password2.value|default_if_none:''}}">
 			 </div>
 
 			 <div class="d-grid"><button type="submit" class="btn btn-lg btn-primary">Schrijf me in!</button></div>
-       {{form.errors}}
-
 		  </form>
-
-
-
-
-
-
-
-
 
 
           <!-- Form END -->

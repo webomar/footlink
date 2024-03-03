@@ -94,6 +94,11 @@
         <div class="col-lg-7 mx-auto mb-4">
           <!-- Heading -->
           <h1 class="display-2 mb-5">{% trans 'De Beste Plek voor Sporters' %}</h1>{% trans '' %}
+          {% if request.user.is_authenticated %}
+          <h3 class="mb-3">{% trans 'Je bent al ingelogd:' %}</h3>
+          <a href="{% url 'feed' %}"><button class="btn btn-primary mx-2">{% trans 'Naar homepagina' %}</button></a>
+
+          {% else %}
           <h3 class="mb-3">{% trans 'Inschrijven als:' %}</h3>
           
           <div class="d-sm-flex justify-content-center">
@@ -114,6 +119,9 @@
               <i>"I can't believe it's free!"</i> {% endcomment %}
             </div>
           </div>
+          {% endif %}
+
+
         </div>
       </div>
       <!-- Row END -->

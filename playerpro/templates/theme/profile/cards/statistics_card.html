@@ -83,25 +83,7 @@
                       </div>
                     </div>
   
-                    <div class="col-6">
-                      <div class="card shadow-none text-center h-100">
-                        <!-- Card body -->
-                        <div class="card-body p-2 pb-0">
-                          <div class="avatar">
-                            <img class="avatar-img" src="{% static 'images/flag.png' %}" alt="">
-                          </div>
-                          <h6 class="card-title mb-1 mt-3"> Played matches:</h6>
-                          <p id="played_matches_value" class="mb-0 small lh-sm played_matches_value">{{user.player.played_matches}}</p>
-                        </div>
-                        <!-- Card footer -->
-                        {% if request.user == user %}
-                        <div class="card-footer p-2 border-0">
-                          <button  data-bs-toggle="modal" data-bs-target="#profileActionPlayedMatches" class="btn btn-sm btn-primary" title="Edit..."> <i class="bi bi-pencil-fill"></i> </button>
-                          {% comment %} <button class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove friend"> <i class="bi bi-person-x"></i> </button> {% endcomment %}
-                        </div>
-                        {% endif %}
-                      </div>
-                    </div>
+
                   </div>
                 </div>
               </div>
