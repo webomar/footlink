@@ -15,6 +15,42 @@
 
         <!-- Main content START -->
         <div class="col-lg-6 vstack gap-4">
+
+
+
+
+
+
+
+
+
+
+
+
+          {% if success == True %}
+          <!-- Event alert START -->
+          <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+            <strong>Informatie is aangepast </strong>
+            {% comment %} <a href="event-details.html" class="btn btn-xs btn-success mt-2 mt-md-0 ms-md-4">View event</a> {% endcomment %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <!-- Event alert END -->
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <!-- Setting Tab content START -->
           <div class="tab-content py-0 mb-0">
 
@@ -40,6 +76,9 @@
                         <label for="id_first_name" class="requiredField">
                         First name 
                         </label> 
+                        {% for error in form.first_name.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
                         <input type="text" name="first_name" maxlength="255" class="textinput form-control" required="" id="id_first_name"  placeholder="{{request.user.first_name}}" {% if request.user.first_name != None %} value="{{request.user.first_name}}" {% endif %}> 
                        </div>
                     </div>
@@ -47,18 +86,29 @@
                        <label for="id_last_name" class=" requiredField">
                        Last name </label> 
                        <div> 
+                        {% for error in form.last_name.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
                         <input type="text" name="last_name" maxlength="255" class="textinput form-control" required="" id="id_last_name"  placeholder="{{request.user.last_name}}" {% if request.user.last_name != None %} value="{{request.user.last_name}}" {% endif %}> 
                       </div>
                     </div>
                     <div id="div_id_email" class="form-group col-sm-6 col-lg-6">
                        <label for="id_email" class=" requiredField">
                        Email </label> 
-                       <div> <input type="email" name="email" maxlength="254" class="emailinput form-control" required="" id="id_email" placeholder="{{request.user.email}}" value="{{request.user.email}}"> </div>
+                       <div> 
+                        {% for error in form.email.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="email" name="email" maxlength="254" class="emailinput form-control" required="" id="id_email" placeholder="{{request.user.email}}" value="{{request.user.email}}"> </div>
                     </div>
                     <div id="div_id_phone_number" class="form-group col-sm-6 col-lg-6">
                       <label for="id_phone_number" class=" requiredField">
                       Phone number </label> 
-                      <div> <input type="text" name="phone_number" maxlength="255" class="textinput form-control" required="" id="id_phone_number"  placeholder="{{request.user.phone_number}}" {% if request.user.phone_number != None %} value="{{request.user.phone_number}}" {% endif %}> </div>
+                      <div> 
+                        {% for error in form.phone_number.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="text" name="phone_number" maxlength="255" class="textinput form-control" required="" id="id_phone_number"  placeholder="{{request.user.phone_number}}" {% if request.user.phone_number != None %} value="{{request.user.phone_number}}" {% endif %}> </div>
                    </div>
                     {% comment %} <div id="div_id_profile_image" class="form-group">
                        <label for="id_profile_image" class="">
@@ -69,13 +119,21 @@
                     <div id="div_id_place" class="form-group col-sm-6 col-lg-6">
                        <label for="id_place" class=" requiredField">
                        Place </label> 
-                       <div> <input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  placeholder="{{request.user.place}}" {% if request.user.place != None %} value="{{request.user.place}}" {% endif %}> </div>
+                       <div> 
+                        {% for error in form.place.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  placeholder="{{request.user.place}}" {% if request.user.place != None %} value="{{request.user.place}}" {% endif %}> </div>
                     </div>
 
                     <div id="div_id_date_of_birth" class="form-group col-sm-6 col-lg-6">
                        <label for="id_date_of_birth" class=" requiredField">
                        Date of birth </label> 
-                       <div> <input type="date" name="date_of_birth" class="dateinput form-control" required="" id="id_date_of_birth" placeholder="{{request.user.date_of_birth|date:'Y-m-d'}}" {% if request.user.date_of_birth != None %} value="{{request.user.date_of_birth|date:'Y-m-d'}}" {% endif %}> </div>
+                       <div> 
+                        {% for error in form.date_of_birth.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="date" name="date_of_birth" class="dateinput form-control" required="" id="id_date_of_birth" placeholder="{{request.user.date_of_birth|date:'Y-m-d'}}" {% if request.user.date_of_birth != None %} value="{{request.user.date_of_birth|date:'Y-m-d'}}" {% endif %}> </div>
                     </div>
 
                     <div id="div_id_profile_image" class="form-group"> 

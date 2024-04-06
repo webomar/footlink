@@ -428,16 +428,13 @@ def player_detail(request, player_pk):
 
 from .forms import EditUserForm69
 @login_required
-def edit_account(request):
+def edit_account_player(request):
     if request.method == 'POST':
         print('request.method == post')
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         profile_form = PlayerProfileForm(request.POST, instance=request.user.player)  # request.FILES is show the selected image or file
 
         print("request.FILES")
-        print("request.FILES")
-        print("request.FILES")
-        # print(request.POST)
         print(request.FILES)
         if form.is_valid() and profile_form.is_valid():
             print("form.is_valid")
@@ -447,7 +444,8 @@ def edit_account(request):
             custom_form.user = user_form
             custom_form.save()
             # return redirect('player_list')
-            return render(request, 'theme/settings.html', {'form': form, 'profile_form': profile_form})
+            success = True
+            return render(request, 'theme/edit_account_player.html', {'form': form, 'profile_form': profile_form, 'success': success})
 
         else:
             print('Error kut')
@@ -458,7 +456,7 @@ def edit_account(request):
             # form = EditProfileForm(instance=request.user)
             # profile_form = PlayerProfileForm(instance=request.user.player)
 
-            return render(request, 'theme/settings.html', {'form': form, 'profile_form': profile_form})
+            return render(request, 'theme/edit_account_player.html', {'form': form, 'profile_form': profile_form})
 
             # return render(request, 'your_template.html', {'form': form, 'profile_form': profile_form})
 
@@ -487,7 +485,7 @@ def edit_account(request):
         # args['form'] = form
         # args['profile_form'] = profile_form
         
-        return render(request, 'theme/settings.html', args)
+        return render(request, 'theme/edit_account_player.html', args)
 
 
 @login_required
@@ -510,7 +508,9 @@ def edit_account_scout(request):
             custom_form.user = user_form
             custom_form.save()
             # return redirect('player_list')
-            return render(request, 'theme/edit_account_scout.html', {'form': form, 'profile_form': profile_form})
+            success = True
+
+            return render(request, 'theme/edit_account_scout.html', {'form': form, 'profile_form': profile_form, 'success': success})
 
         else:
             print('Error kut')
@@ -562,8 +562,6 @@ def edit_account_agent(request):
         profile_form = AgentProfileForm(request.POST, instance=request.user.agent)  # request.FILES is show the selected image or file
 
         print("request.FILES")
-        print("request.FILES")
-        print("request.FILES")
         # print(request.POST)
         print(request.FILES)
         if form.is_valid() and profile_form.is_valid():
@@ -574,7 +572,9 @@ def edit_account_agent(request):
             custom_form.user = user_form
             custom_form.save()
             # return redirect('player_list')
-            return render(request, 'theme/edit_account_agent.html', {'form': form, 'profile_form': profile_form})
+            success = True
+
+            return render(request, 'theme/edit_account_agent.html', {'form': form, 'profile_form': profile_form, 'success': success})
 
         else:
             print('Error kut')

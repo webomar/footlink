@@ -17,6 +17,38 @@
 
         <!-- Main content START -->
         <div class="col-lg-6 vstack gap-4">
+
+
+
+
+
+
+
+
+
+
+
+{% if success == True %}
+                <!-- Event alert START -->
+                <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+                  <strong>Informatie is aangepast </strong>
+                  {% comment %} <a href="event-details.html" class="btn btn-xs btn-success mt-2 mt-md-0 ms-md-4">View event</a> {% endcomment %}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <!-- Event alert END -->
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
           <!-- Setting Tab content START -->
           <div class="tab-content py-0 mb-0">
 
@@ -111,7 +143,10 @@
                       <div> 
                         <label for="id_first_name" class="requiredField">
                         Voornaam 
-                        </label> 
+                        </label>
+                        {% for error in form.first_name.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
                         <input type="text" name="first_name" maxlength="255" class="textinput form-control" required="" id="id_first_name"  placeholder="{{request.user.first_name}}" {% if request.user.first_name != None %} value="{{request.user.first_name}}" {% endif %}> 
                        </div>
                     </div>
@@ -119,18 +154,29 @@
                        <label for="id_last_name" class=" requiredField">
                        Achternaam </label> 
                        <div> 
+                        {% for error in form.last_name.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
                         <input type="text" name="last_name" maxlength="255" class="textinput form-control" required="" id="id_last_name"  placeholder="{{request.user.last_name}}" {% if request.user.last_name != None %} value="{{request.user.last_name}}" {% endif %}> 
                       </div>
                     </div>
                     <div id="div_id_email" class="form-group col-sm-6 col-lg-6">
                        <label for="id_email" class=" requiredField">
                        Email </label> 
-                       <div> <input type="email" name="email" maxlength="254" class="emailinput form-control" required="" id="id_email" placeholder="{{request.user.email}}" value="{{request.user.email}}"> </div>
+                       <div> 
+                        {% for error in form.email.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="email" name="email" maxlength="254" class="emailinput form-control" required="" id="id_email" placeholder="{{request.user.email}}" value="{{request.user.email}}"> </div>
                     </div>
                     <div id="div_id_phone_number" class="form-group col-sm-6 col-lg-6">
                       <label for="id_phone_number" class=" requiredField">
                       Mobiel </label> 
-                      <div> <input type="text" name="phone_number" maxlength="255" class="textinput form-control" required="" id="id_phone_number"  placeholder="{{request.user.phone_number}}" {% if request.user.phone_number != None %} value="{{request.user.phone_number}}" {% endif %}> </div>
+                      <div> 
+                        {% for error in form.phone_number.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="number" name="phone_number" maxlength="255" class="textinput form-control" required="" id="id_phone_number"  placeholder="{{request.user.phone_number}}" {% if request.user.phone_number != None %} value="{{request.user.phone_number}}" {% endif %}> </div>
                    </div>
                     {% comment %} <div id="div_id_profile_image" class="form-group">
                        <label for="id_profile_image" class="">
@@ -141,13 +187,19 @@
                     <div id="div_id_place" class="form-group col-sm-6 col-lg-6">
                        <label for="id_place" class=" requiredField">
                        Plaats </label> 
-                       <div> <input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  placeholder="{{request.user.place}}" {% if request.user.place != None %} value="{{request.user.place}}" {% endif %}> </div>
+                       <div> 
+                        {% for error in form.place.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}<input type="text" name="place" maxlength="255" class="textinput form-control" required="" id="id_place"  placeholder="{{request.user.place}}" {% if request.user.place != None %} value="{{request.user.place}}" {% endif %}> </div>
                     </div>
 
                     <div id="div_id_date_of_birth" class="form-group col-sm-6 col-lg-6">
                        <label for="id_date_of_birth" class=" requiredField">
                        Geboortedatum </label> 
-                       <div> <input type="date" name="date_of_birth" class="dateinput form-control" required="" id="id_date_of_birth" placeholder="{{request.user.date_of_birth|date:'Y-m-d'}}" {% if request.user.date_of_birth != None %} value="{{request.user.date_of_birth|date:'Y-m-d'}}" {% endif %}> </div>
+                       <div> 
+                        {% for error in form.date_of_birth.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}<input type="date" name="date_of_birth" class="dateinput form-control" required="" id="id_date_of_birth" placeholder="{{request.user.date_of_birth|date:'Y-m-d'}}" {% if request.user.date_of_birth != None %} value="{{request.user.date_of_birth|date:'Y-m-d'}}" {% endif %}> </div>
                     </div>
 
                     <div id="div_id_club" class="form-group col-sm-6 col-lg-6">
@@ -155,6 +207,9 @@
                       Club </label> 
                       <div> 
                         <small>Example: PSV</small>
+                        {% for error in form.club.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
                         <input type="text" name="club" placeholder="{{request.user.player.club}}" maxlength="255" class="textinput form-control" required="" id="id_club" {% if request.user.player.club != None %} value="{{request.user.player.club}}" {% endif %}> 
                       </div>
                    </div>
@@ -164,35 +219,57 @@
                     Team </label> 
                     <div> 
                       <small>Example: J/M019</small>
+                      {% for error in form.team.errors %}
+                      <div class="text-danger" role="alert">{{ error }}</div>
+                      {% endfor %}
                       <input type="text" name="team" placeholder="{{request.user.player.team}}" maxlength="255" class="textinput form-control" required="" id="id_team" {% if request.user.player.team != None %} value="{{request.user.player.team}}" {% endif %}> </div>
                   </div>
                  
                     <div id="div_id_competition" class="form-group col-sm-6 col-lg-6">
                        <label for="id_competition" class=" requiredField">
                        Competitie </label> 
-                       <div> <input type="text" name="competition" placeholder="{{request.user.player.competition}}" maxlength="255" class="textinput form-control" required="" id="id_competition" {% if request.user.player.competition != None %} value="{{request.user.player.competition}}" {% endif %}> </div>
+                       <div> 
+                        {% for error in form.competition.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}<input type="text" name="competition" placeholder="{{request.user.player.competition}}" maxlength="255" class="textinput form-control" required="" id="id_competition" {% if request.user.player.competition != None %} value="{{request.user.player.competition}}" {% endif %}> </div>
                     </div>
                     <div id="div_id_length" class="form-group col-sm-6 col-lg-6">
                        <label for="id_length" class=" requiredField">
                        Lengte </label> 
-                       <div> <input type="number" name="length" placeholder="{{request.user.player.length}}" class="numberinput form-control" required="" id="id_length"  {% if request.user.player.length != None %} value="{{request.user.player.length}}" {% endif %}> </div>
+                       <div> 
+                        {% for error in form.length.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="number" name="length" placeholder="{{request.user.player.length}}" class="numberinput form-control" required="" id="id_length"  {% if request.user.player.length != None %} value="{{request.user.player.length}}" {% endif %}> </div>
                     </div>
                     <div id="div_id_weight" class="form-group col-sm-6 col-lg-6">
                        <label for="id_weight" class=" requiredField">
                        Gewicht </label> 
-                       <div> <input type="number" name="weight" placeholder="{{request.user.player.weight}}" class="numberinput form-control" required="" id="id_weight"  {% if request.user.player.weight != None %} value="{{request.user.player.weight}}" {% endif %}> </div>
+                       <div>                         
+                        {% for error in form.weight.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="number" name="weight" placeholder="{{request.user.player.weight}}" class="numberinput form-control" required="" id="id_weight"  {% if request.user.player.weight != None %} value="{{request.user.player.weight}}" {% endif %}> </div>
                     </div>
                     <div id="div_id_position" class="form-group col-sm-6 col-lg-6">
                        <label for="id_position" class=" requiredField">
                        Positie </label> 
-                       <div> <input type="text" name="position"  placeholder="{{request.user.player.position}}" maxlength="255" class="textinput form-control" required="" id="id_position" {% if request.user.player.position != None %} value="{{request.user.player.position}}" {% endif %}>  </div>
+                       <div> 
+                        {% for error in form.position.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="text" name="position"  placeholder="{{request.user.player.position}}" maxlength="255" class="textinput form-control" required="" id="id_position" {% if request.user.player.position != None %} value="{{request.user.player.position}}" {% endif %}>  </div>
                     </div>
 
 
                     <div id="div_id_goals" class="form-group col-sm-6 col-lg-6">
                       <label for="id_goals" class=" requiredField">
                       Aantal doelpunten </label> 
-                      <div> <input type="number" name="goals" placeholder="{{request.user.player.goals}}" {% if request.user.player.goals != None %} value="{{request.user.player.goals}}" {% endif %} class="numberinput form-control" required="" id="id_goals"> </div>
+                      <div> 
+                        {% for error in form.goals.errors %}
+                        <div class="text-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                        <input type="number" name="goals" placeholder="{{request.user.player.goals}}" {% if request.user.player.goals != None %} value="{{request.user.player.goals}}" {% endif %} class="numberinput form-control" required="" id="id_goals"> </div>
                    </div>
 
 

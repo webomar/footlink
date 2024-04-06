@@ -26,6 +26,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     # "daphne",
     # "channels",
+    "phonenumber_field",
     "firstapp",
     "home",
     "search",
@@ -76,10 +77,10 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
-CORS_ALLOWED_ORIGINS = [
-    "https://normal-room-testing.up.railway.app",
-    # Add any other allowed origins if needed
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://normal-room-testing.up.railway.app",
+#     # Add any other allowed origins if needed
+# ]
 ROOT_URLCONF = "playerpro.urls"
 
 TEMPLATES = [
@@ -115,17 +116,17 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'E6aDDa365D4eF6ec3Caa-bB6BC5f1gab',
-        'HOST': 'viaduct.proxy.rlwy.net',
-        'PORT': '33811',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         #'ENGINE': 'django.db.backends.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'E6aDDa365D4eF6ec3Caa-bB6BC5f1gab',
+#         'HOST': 'viaduct.proxy.rlwy.net',
+#         'PORT': '33811',
+#     }
+# }
 
 
 # Password validation
@@ -248,7 +249,8 @@ import logging
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://normal-room-testing.up.railway.app'
+    'https://normal-room-testing.up.railway.app',
+    'https://spelersnet.nl'
 ]
 
 

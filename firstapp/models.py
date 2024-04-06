@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 from django.db.models import Q
 
+from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     is_player = models.BooleanField(default=False)
@@ -18,7 +19,7 @@ class User(AbstractUser):
     place = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
-    phone_number = models.CharField(max_length=20, null=True)
+    phone_number = models.IntegerField(max_length=20, null=True)
     # media_collection = models.ManyToManyField('Post', related_name='players', blank=True)
     followed_users = models.ManyToManyField('User', related_name='followed')    
     posts = models.ManyToManyField('Post', related_name='player_posts', blank=True)
