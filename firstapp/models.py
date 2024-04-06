@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 
 from django.db.models import Q
 
-from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     is_player = models.BooleanField(default=False)

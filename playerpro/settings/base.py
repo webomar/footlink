@@ -26,7 +26,6 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     # "daphne",
     # "channels",
-    "phonenumber_field",
     "firstapp",
     "home",
     "search",
@@ -246,6 +245,7 @@ import logging
 #         'level': 'DEBUG',
 #     },
 # }
+
 
 
 CSRF_TRUSTED_ORIGINS = [
