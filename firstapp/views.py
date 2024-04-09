@@ -487,7 +487,7 @@ def edit_account_player(request):
         
         return render(request, 'theme/edit_account_player.html', args)
 
-
+# 
 @login_required
 def edit_account_scout(request):
     if request.method == 'POST':
