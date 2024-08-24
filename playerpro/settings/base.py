@@ -72,6 +72,8 @@ AWS_S3_USE_SSL = True   # Set to True if your MinIO uses SSL
 # AWS_S3_VERIFY = False    # Disable SSL certificate verification if not using SSL
 AWS_S3_FILE_OVERWRITE = False
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "django-insecure-6-n199)x+*ndh1(ea*oadw@&z2gkx9qa&la!i5l&al39e0bee="
 
 
 
@@ -129,17 +131,6 @@ WSGI_APPLICATION = "playerpro.wsgi.application"
 # }
 
 
-DATABASES = {
-    'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'uNVLMIFOIcXEpaXEECFshzsWnCgkHeVH',
-        'HOST':'junction.proxy.rlwy.net',
-        'PORT': '15394',
-    }
-}
 
 
 # Password validation

@@ -8,7 +8,6 @@ try:
 except ImportError:
     pass
 
-SECRET_KEY = "django-insecure-6-n199)x+*ndh1(ea*oadw@&z2gkx9qa&la!i5l&al39e0bee="
 
 DATABASES = {
     'default': {
@@ -24,6 +23,20 @@ DATABASES = {
 
 MEDIA_URL = os.getenv('PRD_MEDIA_URL')
 AWS_S3_ENDPOINT_URL = os.getenv('PRD_AWS_S3_ENDPOINT_URL')
+
+
+DATABASES = {
+    'default': {
+        #'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'uNVLMIFOIcXEpaXEECFshzsWnCgkHeVH',
+        'HOST':os.getenv('PRD_PGHOST'),
+        'PORT':os.getenv('PRD_PGPORT'),
+    }
+}
+
 print('this is production')
 print('this is production')
 print('this is production')
@@ -33,3 +46,14 @@ print('this is production')
 print('this is production')
 print('this is production')
 print('this is production')
+
+
+
+
+
+
+
+
+
+
+
