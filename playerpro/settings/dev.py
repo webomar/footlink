@@ -16,3 +16,18 @@ try:
     from .local import *
 except ImportError:
     pass
+
+MEDIA_URL = os.getenv('DEV_MEDIA_URL')
+AWS_S3_ENDPOINT_URL = os.getenv('DEV_AWS_S3_ENDPOINT_URL')
+
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')
+print('this is dev')

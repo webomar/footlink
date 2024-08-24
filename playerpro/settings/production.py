@@ -1,7 +1,7 @@
 from .base import *
 ALLOWED_HOSTS = ["*"]
 
-DEBUG = True
+DEBUG = False
 
 try:
     from .local import *
@@ -15,8 +15,20 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'E6aDDa365D4eF6ec3Caa-bB6BC5f1gab',
-        'HOST': 'viaduct.proxy.rlwy.net',
-        'PORT': '33811',
+        'PASSWORD': 'uNVLMIFOIcXEpaXEECFshzsWnCgkHeVH',
+        'HOST':'junction.proxy.rlwy.net',
+        'PORT': '15394',
     }
 }
+
+MEDIA_URL = os.getenv('PRD_MEDIA_URL')
+AWS_S3_ENDPOINT_URL = os.getenv('PRD_AWS_S3_ENDPOINT_URL')
+print('this is production')
+print('this is production')
+print('this is production')
+print('this is production')
+print('this is production')
+print('this is production')
+print('this is production')
+print('this is production')
+print('this is production')

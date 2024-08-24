@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -52,12 +56,21 @@ INSTALLED_APPS = [
     "bootstrap4",
     "crispy_forms",
     "crispy_bootstrap4",
+    "storages",
+
 
 
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_USE_SSL = True   # Set to True if your MinIO uses SSL
+# AWS_S3_VERIFY = False    # Disable SSL certificate verification if not using SSL
+AWS_S3_FILE_OVERWRITE = False
 
 
 
@@ -115,15 +128,16 @@ WSGI_APPLICATION = "playerpro.wsgi.application"
 #     }
 # }
 
+
 DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.sqlite3',
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'E6aDDa365D4eF6ec3Caa-bB6BC5f1gab',
-        'HOST': 'viaduct.proxy.rlwy.net',
-        'PORT': '33811',
+        'PASSWORD': 'uNVLMIFOIcXEpaXEECFshzsWnCgkHeVH',
+        'HOST':'junction.proxy.rlwy.net',
+        'PORT': '15394',
     }
 }
 
@@ -181,8 +195,8 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL = "/media/"
 
 
 # Wagtail settings
