@@ -68,8 +68,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_USE_SSL = False   # Set to True if your MinIO uses SSL
-# AWS_S3_VERIFY = False    # Disable SSL certificate verification if not using SSL
+AWS_S3_USE_SSL = True   # Set to True if your MinIO uses SSL
+AWS_S3_VERIFY = True    # Disable SSL certificate verification if not using SSL
 AWS_S3_FILE_OVERWRITE = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
