@@ -13,12 +13,12 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
     email = models.EmailField(unique=True)
-    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
-    cover_image = models.ImageField(upload_to='cover_images', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='media/profile_images', blank=True, null=True)
+    cover_image = models.ImageField(upload_to='media/cover_images', blank=True, null=True)
     place = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
-    phone_number = models.IntegerField(max_length=20, null=True)
+    phone_number = models.IntegerField(null=True)
     # media_collection = models.ManyToManyField('Post', related_name='players', blank=True)
     followed_users = models.ManyToManyField('User', related_name='followed')    
     posts = models.ManyToManyField('Post', related_name='player_posts', blank=True)
@@ -121,7 +121,7 @@ class Experience(models.Model):
     to_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    club_image = models.ImageField(upload_to='club_images', blank=True, null=True)
+    club_image = models.ImageField(upload_to='media/club_images', blank=True, null=True)
 
     def __str__(self):
         if self.club != None:
@@ -283,7 +283,7 @@ class Media(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     media_type = models.CharField(max_length=5, choices=MEDIA_CHOICES)
-    file = models.FileField(upload_to='post_media')
+    file = models.FileField(upload_to='media/post_media')
     # You can add more fields like captions, descriptions, etc., as needed.
     def is_image(self):
         # Check if the file extension indicates an image (you can add more image formats as needed)
