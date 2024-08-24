@@ -8,6 +8,7 @@ try:
 except ImportError:
     pass
 
+SECRET_KEY = "django-insecure-6-n199)x+*ndh1(ea*oadw@&z2gkx9qa&la!i5l&al39e0bee="
 
 DATABASES = {
     'default': {
